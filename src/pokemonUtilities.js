@@ -1,4 +1,4 @@
-const buildPokemon = (speciesId, level, atkIV, defIV, hpIV, fastMove, chargedMoves) => {
+const buildPokemon = (speciesId, level, atkIV, defIV, hpIV, fastMove, chargedMoves, shields) => {
   let info = gameData.pokemon.filter((pokemon) => pokemon.speciesId === speciesId)[0];
   let preBuiltPokemon = {
     ...info,
@@ -7,7 +7,10 @@ const buildPokemon = (speciesId, level, atkIV, defIV, hpIV, fastMove, chargedMov
     defIV,
     hpIV,
     fastMove: searchAttack(fastMove),
-    chargedMoves: chargedMoves.map((move) => searchAttack(move))
+    chargedMoves: chargedMoves.map((move) => searchAttack(move)),
+    shields,
+    currentMove: null,
+    energy: 0,
   };
   let statsAtLevel = calculateStatsAtLevel(preBuiltPokemon);
   let cp = calculateCP(preBuiltPokemon);
@@ -16,7 +19,8 @@ const buildPokemon = (speciesId, level, atkIV, defIV, hpIV, fastMove, chargedMov
     atk: statsAtLevel[0],
     def: statsAtLevel[1],
     hp: statsAtLevel[2],
-    cp
+    cp,
+    currentHp: statsAtLevel[2],
   }
   return builtPokemon;
 };
