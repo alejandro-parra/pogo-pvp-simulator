@@ -10,8 +10,6 @@
 const init = async () => {
   let medicham = buildPokemon('medicham', 40, 15, 15, 15);
   let wurmple = buildPokemon('wurmple', 50, 15, 15, 15);
-  let counter = searchAttack('Counter');
-  let tackle = searchAttack('Tackle');
   timeElapsed = 0;
   pokemon1CurrentMove = null;
   pokemon1ElapsedTime = 0;
@@ -22,7 +20,6 @@ const init = async () => {
   pokemon1Hp = medicham.hp;
   pokemon2Hp = wurmple.hp;
   while(timeElapsed < 240000) {
-    
     timeElapsed += 500;
   }
 }
