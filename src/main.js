@@ -11,6 +11,14 @@ const init = () => {
   let pokemon1 = buildPokemon('medicham', 40, 15, 15, 15);
   let pokemon2 = buildPokemon('wurmple', 50, 15, 15, 15);
 
+  /*let charged1 = [searchAttack('Blast Burn'), searchAttack('Rock Wrecker')]
+  let charged2 = [searchAttack('Flame Charge'), searchAttack('Return')]
+
+  let pokemon1 = buildPokemon('delphox',50,15,15,15,searchAttack('Lock On'), charged1, 2);
+  let pokemon2 = buildPokemon('gyarados',50,15,15,15, searchAttack('Ember'), charged2, 2);
+
+  console.log(calculateAttackDamage(pokemon1, searchAttack('Fire Spin'), pokemon2));*/
+
   timeElapsed = 0;
   while(timeElapsed < 240000) {
 
@@ -55,12 +63,11 @@ const init = () => {
 
 
 const decideNextMove = (attackingPokemon, defendingPokemon) => {
-  let bestMove = [attackingPokemon.fastMove, ]
-  for()
+  let bestMove = attackingPokemon.fastMove;
 };
 
-const damageEfficiency = () => {
-
+const damageEfficiency = (attackingPokemon, attack, defendingPokemon) => {
+  return calculateAttackDamage(attackingPokemon, attack, defendingPokemon) / attack.energy;
 };
 
 window.addEventListener('DOMContentLoaded', init);

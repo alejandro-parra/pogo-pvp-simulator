@@ -11,6 +11,7 @@ const buildPokemon = (speciesId, level, atkIV, defIV, hpIV, fastMove, chargedMov
     shields,
     currentMove: null,
     energy: 0,
+    buffs: [0, 0]
   };
   let statsAtLevel = calculateStatsAtLevel(preBuiltPokemon);
   let cp = calculateCP(preBuiltPokemon);
@@ -76,9 +77,25 @@ const calculateAttackDamage = (attackingPokemon, attack, opposingPokemon) => {
   const hasStab = attackingPokemon.types.includes(attack.type);
   const stab = hasStab ? 1.2 : 1;
   const bonusMultiplier = 1.3;
-  return Math.floor(0.5 * attack.power * (attackingPokemon.atk / opposingPokemon.def) * stab * calculateMoveEffectiveness(attack.type, opposingPokemon.types) * bonusMultiplier) + 1;
+  return Math.floor(0.5 * attack.power * ( getStat(attackingPokemon, 0) / getStat(opposingPokemon, 1)) * stab * calculateMoveEffectiveness(attack.type, opposingPokemon.types) * bonusMultiplier) + 1;
 };
 
 const searchAttack = (attackName) => {
   return gameData.moves.filter((move) => move.name === attackName)[0];
+}
+
+const getStat = (pokemon, stat) => {
+  if(stat == 0){
+    return pokemon.atk * (isShadow(pokemon.speciesId) ? (1.2) : 1) * getBuffMultiplier(pokemon, 0);
+  } else if(stat == 1){
+    return pokemon.def * (isShadow(pokemon.speciesId) ? (5/6) : 1) * getBuffMultiplier(pokemon, 1);
+  }
+}
+
+const getBuffMultiplier = (pokemon, stat) => {
+  if(pokemon.buffs[stat] > 0) {
+    return (4 + pokemon.buffs[stat]) / 4;
+  } else{
+    return 4 / (4 - pokemon.buffs[stat]);
+  }
 }
