@@ -102,13 +102,13 @@ export class Pokebattle {
   chargedDamage(attackingPokemon: Pokemon, defendingPokemon: Pokemon, timeLeft: number, currentEnergy: number): number {
     let damage1 = this.chargedDamage2(attackingPokemon,defendingPokemon,timeLeft,currentEnergy,attackingPokemon.data.currentChargedMoves[0]);
     let damage2 = 0
-    if(attackingPokemon.data.chargedMoves.length > 1){
+    if(attackingPokemon.data.currentChargedMoves.length > 1){
        damage2 += this.chargedDamage2(attackingPokemon,defendingPokemon,timeLeft,currentEnergy,attackingPokemon.data.currentChargedMoves[1]);
     }
     return Math.max(damage1,damage2);
   }
   
-  chargedDamage2(attackingPokemon: Pokemon, defendingPokemon: Pokemon, timeLeft: number, currentEnergy: number, move: Move) {
+  chargedDamage2(attackingPokemon: Pokemon, defendingPokemon: Pokemon, timeLeft: number, currentEnergy: number, move: Move): number {
     const atkBuffs = attackingPokemon.data.buffs;
     const defBuffs = defendingPokemon.data.buffs;
     let baseDamage = 0;
