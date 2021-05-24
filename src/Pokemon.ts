@@ -15,8 +15,11 @@ export class Pokemon {
     this.data.atkIV = atkIV;
     this.data.defIV = defIV;
     this.data.hpIV = hpIV;
-    this.data.currentFastMove = {...searchAttack(fastMove), typeOfMove: TypeOfMove.fast};
-    this.data.currentChargedMoves = chargedMoves.map((move) => {return {...searchAttack(move), typeOfMove: TypeOfMove.charged}});
+    this.data.currentFastMove = searchAttack(fastMove);
+    this.data.currentFastMove.typeOfMove = TypeOfMove.fast;
+    this.data.currentChargedMoves = chargedMoves
+    .map((move) => searchAttack(move))
+    .map((move) => { move.typeOfMove = TypeOfMove.charged; return move });
     this.data.shields = shields;
     this.data.currentMove = null;
     this.data.energy = 0;

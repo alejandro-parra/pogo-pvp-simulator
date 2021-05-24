@@ -52,6 +52,11 @@ export enum TypeOfMove {
   charged
 }
 
+export enum BuffTarget {
+  self = 'self',
+  opponent = 'opponent'
+}
+
 export interface Move {
   moveId: string;
   name: string;
@@ -62,7 +67,7 @@ export interface Move {
   cooldown: number;
   archetype?: string;
   buffs?: [number, number];
-  buffTarget?: string;
+  buffTarget?: BuffTarget;
   buffApplyChance?: string;
   abbreviation?: string;
   elapsed?: number;
@@ -51976,7 +51981,7 @@ export const gameData: GameData =  {
            0,
            -2
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"1",
         "archetype":"Debuff"
      },
@@ -52002,7 +52007,7 @@ export const gameData: GameData =  {
            2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".125",
         "archetype":"Boost Nuke"
      },
@@ -52038,7 +52043,7 @@ export const gameData: GameData =  {
            2,
            2
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".1",
         "archetype":"Boost"
      },
@@ -52168,7 +52173,7 @@ export const gameData: GameData =  {
            0,
            -3
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Nuke"
      },
@@ -52217,7 +52222,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"1",
         "archetype":"Debuff Spam/Bait"
      },
@@ -52245,7 +52250,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".3",
         "archetype":"High Energy Debuff"
      },
@@ -52313,7 +52318,7 @@ export const gameData: GameData =  {
            0,
            -2
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff"
      },
@@ -52352,7 +52357,7 @@ export const gameData: GameData =  {
            2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".125",
         "archetype":"Boost"
      },
@@ -52472,7 +52477,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Nuke"
      },
@@ -52582,7 +52587,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".1",
         "archetype":"High Energy Debuff"
      },
@@ -52608,7 +52613,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".1",
         "archetype":"High Energy Debuff"
      },
@@ -52646,7 +52651,7 @@ export const gameData: GameData =  {
            1,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Boost Spam/Bait"
      },
@@ -52726,7 +52731,7 @@ export const gameData: GameData =  {
            1,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Boost"
      },
@@ -53236,7 +53241,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"1",
         "archetype":"Debuff"
      },
@@ -53322,7 +53327,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".5",
         "archetype":"Debuff Spam/Bait"
      },
@@ -53339,7 +53344,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Nuke"
      },
@@ -53396,7 +53401,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"1",
         "archetype":"Debuff"
      },
@@ -53476,7 +53481,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".3",
         "archetype":"Debuff Spam/Bait"
      },
@@ -53492,7 +53497,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".1",
         "archetype":"Debuff Nuke"
      },
@@ -53518,7 +53523,7 @@ export const gameData: GameData =  {
            -1,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".3",
         "archetype":"Debuff Spam/Bait"
      },
@@ -53566,7 +53571,7 @@ export const gameData: GameData =  {
            2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".125",
         "archetype":"Boost Spam/Bait"
      },
@@ -53583,7 +53588,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"0.5",
         "archetype":"Debuff"
      },
@@ -53599,7 +53604,7 @@ export const gameData: GameData =  {
            2,
            2
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".1",
         "archetype":"Boost"
      },
@@ -53636,7 +53641,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Nuke"
      },
@@ -53768,7 +53773,7 @@ export const gameData: GameData =  {
            1,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Boost Spam/Bait"
      },
@@ -53827,7 +53832,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".1",
         "archetype":"High Energy Debuff"
      },
@@ -53843,7 +53848,7 @@ export const gameData: GameData =  {
            -2,
            0
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Spam"
      },
@@ -54005,7 +54010,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":"1",
         "archetype":"Debuff Spam/Bait"
      },
@@ -54075,7 +54080,7 @@ export const gameData: GameData =  {
            0,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".2",
         "archetype":"Debuff"
      },
@@ -54122,7 +54127,7 @@ export const gameData: GameData =  {
            -1,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".2",
         "archetype":"High Energy Debuff"
      },
@@ -54139,7 +54144,7 @@ export const gameData: GameData =  {
            2,
            2
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":".1",
         "archetype":"Boost"
      },
@@ -54156,7 +54161,7 @@ export const gameData: GameData =  {
            0,
            1
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Boost Nuke"
      },
@@ -54343,7 +54348,7 @@ export const gameData: GameData =  {
            -1,
            -1
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Spam"
      },
@@ -54522,7 +54527,7 @@ export const gameData: GameData =  {
            -1,
            -1
         ],
-        "buffTarget":"opponent",
+        "buffTarget":BuffTarget.opponent,
         "buffApplyChance":".5",
         "archetype":"Debuff"
      },
@@ -54549,7 +54554,7 @@ export const gameData: GameData =  {
            0,
            -3
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff Spam"
      },
@@ -54675,7 +54680,7 @@ export const gameData: GameData =  {
            0,
            -2
         ],
-        "buffTarget":"self",
+        "buffTarget":BuffTarget.self,
         "buffApplyChance":"1",
         "archetype":"Self-Debuff"
      },
