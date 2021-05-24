@@ -2,4 +2,7 @@
 
 - npm install -g typescript
 - npm install -g parcel-bundler
-- parcel index.html
+
+## How to run
+- run command 'parcel index.html'
+- go to localhost:1234 on browser
