@@ -1,4 +1,6 @@
-import { gameData, PokemonInfo, TypeOfMove } from './data';
+import { gameData, Move, PokemonInfo, TypeOfMove } from './data';
+import { MoveSelector } from './MoveSelector';
+import { Pokebattle } from './Pokebattle';
 import { getCpMultiplier, searchAttack, truncateOneDecimal, calculateMoveEffectiveness } from './Utilities';
 
 export enum Stat {
@@ -8,6 +10,7 @@ export enum Stat {
 
 export class Pokemon {
   data: PokemonInfo;
+  moveSelector: MoveSelector;
 
   constructor(speciesId: string, level: number, atkIV: number, defIV: number, hpIV: number, fastMove: string, chargedMoves: string[], shields: number) {
     this.data = gameData.pokemon.filter((pokemon) => pokemon.speciesId === speciesId)[0];
@@ -107,6 +110,20 @@ export class Pokemon {
       return 2;
     }
   }
+
+  setMoveSelector(defendingPokemon: Pokemon, pokeBattle: Pokebattle): void {
+    this.moveSelector = new MoveSelector(this, defendingPokemon, pokeBattle);
+  }
+
+  decideNextMove(): void{
+    this.data.currentMove = this.moveSelector.decideNextMove();
+    this.data.currentMove.elapsed = 0;
+  }
+
+  decideShield(): boolean {
+    return this.moveSelector.decideShield();
+  }
+
 }
 
 

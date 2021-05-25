@@ -8,12 +8,8 @@ export class MoveSelector {
     pokebattle: Pokebattle;
     currentState: number;
 
-    shieldMatrix: string[][] =
-    [
-        ["false", "true"],
-        ["true", "false"],
-        ["true", "false"]
-    ]
+    shieldVector: string[] = ["false", "true", "true"]
+
     moveMatrix: number[][] =
     [
         [0, 0, 0, 0, 1], //q-1
@@ -27,7 +23,8 @@ export class MoveSelector {
         [0, 0, 0, 0, 1], //q7
         [0, 0, 0, 0, 1], //q8
 
-    ]                                         
+    ]
+
     transitionMatrix: string[][] =
     [
                  //  q-1     q0      q1      q2      q3      q4      q5      q6      q7      q8
@@ -76,6 +73,10 @@ export class MoveSelector {
             }
         }
 
+    }
+
+    decideShield(): boolean {
+        return eval(this.shieldVector[this.attackingPokemon.data.shields]);
     }
 
     decideNextMove(): Move {

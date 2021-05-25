@@ -7,56 +7,92 @@ export class Pokebattle {
   results?: any;
   pokemon1: Pokemon;
   pokemon2: Pokemon;
+  firstKO: Pokemon;
 
   constructor(pokemon1: Pokemon, pokemon2: Pokemon) {
     this.pokemon1 = pokemon1;
     this.pokemon2 = pokemon2;
+
+    this.pokemon1.setMoveSelector(this.pokemon2, this);
+    this.pokemon2.setMoveSelector(this.pokemon1, this);
+
+    this.firstKO = null;
   }
 
 
   battle(): void {
     let timeElapsed = 0;
     while(timeElapsed < 240000) {
-  
+
+      if(this.pokemon1.data.currentMove && this.pokemon2.data.currentMove && this.pokemon1.data.currentMove.elapsed + 500 >= this.pokemon1.data.currentMove.cooldown && this.pokemon2.data.currentMove.elapsed + 500 >= this.pokemon2.data.currentMove.cooldown && this.pokemon1.moveSelector.moveKills(TypeOfMove.fast.valueOf()) && this.pokemon2.moveSelector.moveKills(TypeOfMove.fast.valueOf())){
+        this.registerAttack(this.pokemon1, this.pokemon2);
+        this.registerAttack(this.pokemon2, this.pokemon1);
+        this.firstKO = null;
+        timeElapsed += 500;
+        break;
+      }
+
       if(this.pokemon1.data.currentMove) {
         this.pokemon1.data.currentMove.elapsed += 500;
         if(this.pokemon1.data.currentMove.elapsed >= this.pokemon1.data.currentMove.cooldown) {
-          this.pokemon2.data.currentHp -= this.calculateAttackDamage(this.pokemon1, this.pokemon1.data.currentMove, this.pokemon2);
-          this.pokemon1.data.currentMove = null;
+          this.registerAttack(this.pokemon1, this.pokemon2);
         }
       }
       if(this.pokemon2.data.currentMove) {
         this.pokemon2.data.currentMove.elapsed += 500;
         if(this.pokemon2.data.currentMove.elapsed >= this.pokemon2.data.currentMove.cooldown) {
-          this.pokemon1.data.currentHp -= this.calculateAttackDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1);
-          this.pokemon2.data.currentMove = null;
+          this.registerAttack(this.pokemon2, this.pokemon1);
         }
       }
       
       if(!this.pokemon1.data.currentMove) {
-        // this.pokemon1.data.currentMove = decideNextMove(this.pokemon1, this.pokemon2);
+        this.pokemon1.decideNextMove();
       }
       if(!this.pokemon2.data.currentMove) {
-        // this.pokemon2.data.currentMove = decideNextMove(this.pokemon2, this.pokemon1);
+        this.pokemon2.decideNextMove();
       }
+
+      console.log("Nuevo turno: " + timeElapsed);
+      console.log("PKMN1 HP: " + this.pokemon1.data.currentHp);
+      console.log("PKMN2 HP: " + this.pokemon2.data.currentHp);
+      console.log("PKMN1 move: " + this.pokemon1.data.currentMove);
+      console.log("PKMN2 move: " + this.pokemon2.data.currentMove);
   
       if(this.pokemon1.data.currentMove && this.pokemon2.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged && this.pokemon2.data.currentMove.typeOfMove === TypeOfMove.charged) {
-        // ver quien ataca
-        timeElapsed += 5000;
+        if(this.pokemon1.data.atk > this.pokemon2.data.atk){
+          this.registerAttack(this.pokemon1, this.pokemon2);
+          this.registerAttack(this.pokemon2, this.pokemon1);
+        } else if (this.pokemon1.data.atk < this.pokemon2.data.atk){
+          this.registerAttack(this.pokemon2, this.pokemon1);
+          this.registerAttack(this.pokemon1, this.pokemon2);
+        } else{
+          const rand = Math.random();
+          if(rand > 0.5){
+            this.registerAttack(this.pokemon1, this.pokemon2);
+            this.registerAttack(this.pokemon2, this.pokemon1);
+          } else{
+            this.registerAttack(this.pokemon2, this.pokemon1);
+            this.registerAttack(this.pokemon1, this.pokemon2);
+          }
+        }
       } else if(this.pokemon1.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged) {
-        // ataca this.pokemon1, this.pokemon2 ve si usa un shield
-        timeElapsed += 5000;
+        this.registerAttack(this.pokemon1, this.pokemon2);
       } else if(this.pokemon2.data.currentMove && this.pokemon2.data.currentMove.typeOfMove === TypeOfMove.charged) {
-        // ataca this.pokemon2, this.pokemon1 ve si usa un shield
-        timeElapsed += 5000;
+        this.registerAttack(this.pokemon2, this.pokemon1);
       }
-  
+
       // añadimos el tiempo al contador global
       timeElapsed += 500;
-    }
-  };
 
-  decideNextMove(attackingPokemon: Pokemon, defendingPokemon: Pokemon) {
+        
+      if(this.firstKO){
+        break;
+      }
+    }
+
+    console.log(this.firstKO);
+    console.log(timeElapsed / 500);
+
   };
   
   damageEfficiency(attackingPokemon: Pokemon, attack: Move, defendingPokemon: Pokemon): number {
@@ -131,4 +167,50 @@ export class Pokebattle {
   
     return Math.max(damage1,damage2);
   }
+
+  
+  registerAttack(attackingPokemon: Pokemon, defendingPokemon: Pokemon): void {
+    const move = attackingPokemon.data.currentMove;
+    console.log(attackingPokemon.data.speciesName + " used " + move.name);
+
+    if(move.typeOfMove == TypeOfMove.fast){
+      attackingPokemon.data.energy += move.energyGain;
+      defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
+      this.pokemonFainted(defendingPokemon);
+
+    } else{
+      attackingPokemon.data.energy -= move.energy;
+      
+      if(defendingPokemon.decideShield()){
+        defendingPokemon.data.shields -= 1;
+      } else{
+        defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
+        this.pokemonFainted(defendingPokemon);
+      }
+
+      if(move.buffs){
+        const rand = 1 - Math.random();
+        if(parseFloat(move.buffApplyChance) >= rand){
+          const bt = (move.buffTarget === BuffTarget.self ? attackingPokemon : defendingPokemon);
+          for(var i = 0; i < 2; i++){
+            bt.data.buffs[i] = Math.min(Math.max(bt.data.buffs[i] + move.buffs[i], -4), 4);
+          }
+        }
+      }
+
+      if(defendingPokemon.data.currentMove && defendingPokemon.data.currentMove.typeOfMove === TypeOfMove.fast && defendingPokemon.data.currentMove.elapsed > 0){
+        this.registerAttack(this.pokemon1, this.pokemon2);
+      }
+
+    }
+
+    attackingPokemon.data.currentMove = null;
+  }
+
+  pokemonFainted(pokemon: Pokemon): void {
+    if(pokemon.data.currentHp == 0 && !this.firstKO) {
+      this.firstKO = pokemon;
+    }
+  }
+
 }

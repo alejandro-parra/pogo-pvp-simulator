@@ -9,16 +9,12 @@ const init = (): void => {
 
   let pokeBattle = new Pokebattle(durant, blissey);
 
-  //pokeBattle.battle();
-  console.log(pokeBattle.calculateAttackDamage(pokeBattle.pokemon1, pokeBattle.pokemon1.data.currentFastMove, pokeBattle.pokemon2));
+  pokeBattle.battle();
+  /*console.log(pokeBattle.calculateAttackDamage(pokeBattle.pokemon1, pokeBattle.pokemon1.data.currentFastMove, pokeBattle.pokemon2));
   console.log(pokeBattle.calculateAttackDamage(pokeBattle.pokemon2, pokeBattle.pokemon2.data.currentFastMove, pokeBattle.pokemon1));
 
   console.log(pokeBattle.maxDamageInTurns(pokeBattle.pokemon1, pokeBattle.pokemon2, 20));
-  console.log(pokeBattle.maxDamageInTurns(pokeBattle.pokemon2, pokeBattle.pokemon1, 20));
-
-  let ms = new MoveSelector(blissey, durant, pokeBattle);
-
-  console.log(ms.decideNextMove());
+  console.log(pokeBattle.maxDamageInTurns(pokeBattle.pokemon2, pokeBattle.pokemon1, 20));*/
 
 }
 
