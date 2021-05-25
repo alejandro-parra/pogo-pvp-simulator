@@ -4,8 +4,8 @@ import { MoveSelector } from './MoveSelector';
 import { searchAttack } from './Utilities';
 
 const init = (): void => {
-  let durant = new Pokemon('durant', 50, 15, 15, 15, 'Bug Bite', ['X-Scissor'], 2);
-  let blissey = new Pokemon('blissey', 50, 15, 15, 15, 'Pound', ['Psychic', 'Hyper Beam'], 2);
+  let durant = new Pokemon('cresselia', 20, 4, 7, 13, 'Psycho Cut', ['Moonblast', 'Grass Knot'], 2);
+  let blissey = new Pokemon('altaria', 28.5, 4, 14, 11, 'Dragon Breath', ['Sky Attack', 'Dragon Pulse'], 2);
 
   let pokeBattle = new Pokebattle(durant, blissey);
 

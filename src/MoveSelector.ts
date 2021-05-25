@@ -34,7 +34,7 @@ export class MoveSelector {
         /* q2 */  ["false", "false", "false", "false", "this.moveKills(2)", "!this.moveKills(2)", "false", "false", "false", "false"],
         /* q3 */  ["true", "false", "false", "false", "false", "false", "false", "false", "false", "false"],
         /* q4 */  ["false", "this.defendingPokemon.data.shields != 0", "false", "false", "false", "false", "this.defendingPokemon.data.shields == 0", "false", "false", "false"],
-        /* q5 */  ["false", "this.C1IsReachable()", "false", "false", "!this.C1IsReachable()", "false", "false", "false", "false", "false"],
+        /* q5 */  ["false", "this.c1IsReachable()", "false", "false", "!this.c1IsReachable()", "false", "false", "false", "false", "false"],
         /* q6 */  ["false", "false", "this.defendingPokemon.data.shields == 0", "false", "false", "false", "false", "false", "this.defendingPokemon.data.shields == 2", "this.defendingPokemon.data.shields == 1"],
         /* q7 */  ["false", "false", "this.attackingPokemon.getLowerEnergyMove() == 1", "false", "this.attackingPokemon.getLowerEnergyMove() == 2", "false", "false", "false", "false", "false"],
         /* q8 */  ["false", "false", "this.attackingPokemon.data.currentHp >= 50", "false", "this.attackingPokemon.data.currentHp < 50", "false", "false", "false", "false", "false"]
