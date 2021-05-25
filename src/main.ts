@@ -1,18 +1,57 @@
 import { Pokebattle } from './Pokebattle';
 import { Pokemon } from './Pokemon';
+import { gameData } from './data';
+import { orderedPokemonList } from './Utilities';
+
+enum League {
+  Great,
+  Ultra,
+  Master
+}
 
 const init = (): void => {
-  let durant = new Pokemon('durant', 50, 15, 15, 15, 'Bug Bite', ['X-Scissor'], 2);
-  let blissey = new Pokemon('blissey', 50, 15, 15, 15, 'Spark', ['Discharge', 'Thunderbolt'], 2);
-
-  let pokeBattle = new Pokebattle(durant, blissey);
-
-  //pokeBattle.battle();
-  console.log(pokeBattle.calculateAttackDamage(pokeBattle.pokemon1, pokeBattle.pokemon1.data.currentFastMove, pokeBattle.pokemon2));
-  console.log(pokeBattle.calculateAttackDamage(pokeBattle.pokemon2, pokeBattle.pokemon2.data.currentFastMove, pokeBattle.pokemon1));
-
-  console.log(pokeBattle.maxDamageInTurns(pokeBattle.pokemon1, pokeBattle.pokemon2, 20));
-  console.log(pokeBattle.maxDamageInTurns(pokeBattle.pokemon2, pokeBattle.pokemon1, 20));
+  hide('battleButton');
+  populatePokemonList();
 }
+
+const populatePokemonList = (): void => {
+  populatePokemonSelect('selectPokemon1');
+  populatePokemonSelect('selectPokemon2');
+
+  let pokemon1 = getElement('selectPokemon1'); 
+  pokemon1.addEventListener('change', (e: Event) => {
+    let target = e.target as HTMLSelectElement;
+    if(target.value) {
+      show('pokemon1');
+    } else {
+      hide('pokemon1');
+    }
+  });
+  getElement('pokemon2').addEventListener('change', (e: Event) => {
+    
+  });
+};
+
+const populatePokemonSelect = (selectId: string): void => {
+  let select = getElement(selectId);
+  for(let pokemon of orderedPokemonList()) {
+    let pokemonOption = document.createElement('option');
+    pokemonOption.value = pokemon.speciesId;
+    pokemonOption.innerHTML = pokemon.speciesId;
+    select.appendChild(pokemonOption);
+  }
+};
+
+const show = (element: string): void => {
+  getElement(element).style.display = 'block';
+}
+
+const hide = (element: string): void => {
+  getElement(element).style.display = 'none';
+}
+
+const getElement = (id: string): HTMLElement => {
+  return document.getElementById(id);
+};
 
 window.addEventListener('DOMContentLoaded', init);
