@@ -1,5 +1,7 @@
 import { BuffTarget, Move, typeEffectiveness, TypeOfMove } from './data';
 import { Pokemon, Stat } from './Pokemon';
+import { calculateMoveEffectiveness } from './Utilities';
+
 
 export class Pokebattle {
   results?: any;
@@ -61,26 +63,11 @@ export class Pokebattle {
     return this.calculateAttackDamage(attackingPokemon, attack, defendingPokemon) / attack.energy;
   };
   
-  calculateMoveEffectiveness(attackType: string, pokemonTypes: string[]): number {
-    let baseEffectiveness = 1;
-    let attackTE = typeEffectiveness.filter((type) => type.name === attackType)[0];
-    for(let type of pokemonTypes) {
-      if(attackTE.immunes.includes(type)) {
-        baseEffectiveness *= 0.390625;
-      } else if(attackTE.weaknesses.includes(type)) {
-        baseEffectiveness *= 0.625;
-      } else if (attackTE.strengths.includes(type)) {
-        baseEffectiveness *= 1.6;
-      }
-    }
-    return baseEffectiveness;
-  };
-  
   calculateAttackDamage(attackingPokemon: Pokemon, attack: Move, opposingPokemon: Pokemon): number {
     const hasStab = attackingPokemon.data.types.includes(attack.type);
     const stab = hasStab ? 1.2 : 1;
     const bonusMultiplier = 1.3;
-    return Math.floor(0.5 * attack.power * ( attackingPokemon.getStat(Stat.atk) / opposingPokemon.getStat(Stat.def)) * stab * this.calculateMoveEffectiveness(attack.type, opposingPokemon.data.types) * bonusMultiplier) + 1;
+    return Math.floor(0.5 * attack.power * ( attackingPokemon.getStat(Stat.atk) / opposingPokemon.getStat(Stat.def)) * stab * calculateMoveEffectiveness(attack.type, opposingPokemon.data.types) * bonusMultiplier) + 1;
   };
   
   maxDamageInTurns(attackingPokemon: Pokemon, defendingPokemon: Pokemon, turns: number): number {
