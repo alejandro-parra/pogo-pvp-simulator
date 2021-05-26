@@ -10,6 +10,101 @@
 .row {
   display: flex;
   flex-direction: row;
-  width: 100%;
   justify-content: space-evenly;
+  padding: 1rem;
+}
+
+.border {
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.stat-row {
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-column {
+  width: 30%;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.main-row {
+  width: 60%;
+  margin-left: 20%;
+}
+
+.mb-small {
+  margin-bottom: 1rem;
+}
+
+.poke-row {
+  width: 80%;
+}
+
+.standard-select {
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background-color: none;
+  color: black;
+}
+
+.standard-select:hover {
+  cursor: pointer;
+}
+
+.padding-y {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.mt-large {
+  margin-top: 2rem;
+}
+
+.pokemon-container {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.label {
+  width: 60%;
+}
+.sub-select {
+  width: 40%;
+}
+
+.move-select {
+  width: 100%;
+}
+
+.standard-button {
+  padding-right: 2rem;
+  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: 20%;
+  background-color: red;
+  color: white;
+}
+
+.standard-button:hover {
+  transform: scale(1.1);
+  cursor: pointer;
 }
