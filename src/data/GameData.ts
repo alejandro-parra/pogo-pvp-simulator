@@ -18,7 +18,7 @@ export interface PokemonInfo {
   chargedMoves: string[];
   legacyMoves?: string[];
   eliteMoves?: string[];
-  defaultIVs?: {
+  defaultIVs: {
     cp500?: number[];
     cp1500?: number[];
     cp2500?: number[];
