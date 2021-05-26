@@ -23,6 +23,10 @@ const init = (): void => {
 const battleButtonHandler = (): void => {
   console.log(pokemon1)
   console.log(pokemon2)
+  pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
+  pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
+  recalculatePokemon1();
+  recalculatePokemon2();
   if(!(getElement('pokemon1Shields') as HTMLSelectElement).value || !(getElement('pokemon2Shields') as HTMLSelectElement).value) {
     alert('You must assign a shield number to your pokemon');
   } else if(getElement('pokemon1CP').classList.contains('red') || getElement('pokemon2CP').classList.contains('red')) {
