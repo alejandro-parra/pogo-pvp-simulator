@@ -2,7 +2,7 @@ import { Pokebattle } from './Pokebattle';
 import { Pokemon } from './Pokemon';
 import { MoveSelector } from './MoveSelector';
 import { searchAttack } from './Utilities';
-import { gameData, Move, PokemonInfo } from './data';
+import { gameData, Move, PokemonInfo, TypeOfMove } from './data';
 import { orderedPokemonList, searchPokemonInfo } from './Utilities';
 
 var pokemon1: Pokemon;
@@ -21,6 +21,8 @@ const init = (): void => {
 }
 
 const battleButtonHandler = (): void => {
+  console.log(pokemon1)
+  console.log(pokemon2)
   if(!(getElement('pokemon1Shields') as HTMLSelectElement).value || !(getElement('pokemon2Shields') as HTMLSelectElement).value) {
     alert('You must assign a shield number to your pokemon');
   } else if(getElement('pokemon1CP').classList.contains('red') || getElement('pokemon2CP').classList.contains('red')) {
@@ -236,6 +238,22 @@ const handleSelectChange = (e: Event): void => {
   } else if(event.id === 'pokemon2HpIV') {
     pokemon2.data.hpIV = Number(event.value);
     recalculatePokemon2();
+  }  else if(event.id === 'pokemon1Shields') {
+    pokemon1.data.shields = Number(event.value);
+  } else if(event.id === 'pokemon2Shields') {
+    pokemon2.data.shields = Number(event.value);
+  } else if(event.id === 'pokemon1FastMove') {
+    pokemon1.data.currentFastMove = {...searchAttack(event.value), typeOfMove: TypeOfMove.fast};
+  } else if(event.id === 'pokemon2FastMove') {
+    pokemon2.data.currentFastMove = {...searchAttack(event.value), typeOfMove: TypeOfMove.fast};
+  } else if(event.id === 'pokemon1ChargedMove1') {
+    pokemon1.data.currentChargedMoves[0] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
+  } else if(event.id === 'pokemon1ChargedMove2') {
+    pokemon1.data.currentChargedMoves[1] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
+  } else if(event.id === 'pokemon2ChargedMove1') {
+    pokemon2.data.currentChargedMoves[0] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
+  } else if(event.id === 'pokemon2ChargedMove2') {
+    pokemon2.data.currentChargedMoves[1] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
   }
 };
 
