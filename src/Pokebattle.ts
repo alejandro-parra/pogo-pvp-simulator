@@ -11,7 +11,9 @@ export class Pokebattle {
 
   constructor(pokemon1: Pokemon, pokemon2: Pokemon) {
     this.pokemon1 = pokemon1;
+    this.pokemon1.data = JSON.parse(JSON.stringify(pokemon1.data));
     this.pokemon2 = pokemon2;
+    this.pokemon2.data = JSON.parse(JSON.stringify(pokemon2.data));
 
     this.pokemon1.setMoveSelector(this.pokemon2, this);
     this.pokemon2.setMoveSelector(this.pokemon1, this);
@@ -31,6 +33,9 @@ export class Pokebattle {
         timeElapsed += 500;
         break;
       }
+
+      //console.log("PKMN1 move: " + this.pokemon1.data.currentMove);
+      //console.log("PKMN2 move: " + this.pokemon2.data.currentMove);
 
       if(this.pokemon1.data.currentMove) {
         this.pokemon1.data.currentMove.elapsed += 500;
@@ -53,7 +58,7 @@ export class Pokebattle {
       }
 
       //console.log("=========================");
-      console.log("Nuevo turno: " + (timeElapsed / 500));
+      //console.log("Nuevo turno: " + (timeElapsed / 500));
       //console.log("PKMN1 HP: " + this.pokemon1.data.currentHp);
       //console.log("PKMN2 HP: " + this.pokemon2.data.currentHp);
       //console.log("PKMN1 move: " + this.pokemon1.data.currentMove.name);
@@ -94,10 +99,10 @@ export class Pokebattle {
 
     console.log(this.firstKO);
     console.log(timeElapsed / 500);
-    console.log("Durant Buffs: " + this.pokemon1.data.buffs);
-    console.log("Blissey Buffs: " + this.pokemon2.data.buffs);
-    console.log("Durant HP: " + this.pokemon1.data.currentHp);
-    console.log("Blissey HP: " + this.pokemon2.data.currentHp);
+    console.log("PKMN1 Buffs: " + this.pokemon1.data.buffs);
+    console.log("PKMN2 Buffs: " + this.pokemon2.data.buffs);
+    console.log("PKMN1 HP: " + this.pokemon1.data.currentHp);
+    console.log("PKMN2 HP: " + this.pokemon2.data.currentHp);
 
   };
   
@@ -212,7 +217,8 @@ export class Pokebattle {
 
     }
 
-    attackingPokemon.data.currentMove = null;
+    attackingPokemon.data.currentMove = null; 
+
   }
 
   pokemonFainted(pokemon: Pokemon): void {
