@@ -8,8 +8,159 @@
 </head>
 <body>
   <div class="main container">
-    <div class="row">
-      <select name="" id=""></select>
+    <div class="row mt-large main-row">
+      <select class="standard-select padding-y" id="selectPokemon1">
+        <option value="" selected disabled>Select a pokemon:</option>
+      </select>
+      <select class="standard-select padding-y" id="selectLeague">
+        <option value="0" selected>Great League</option>
+        <option value="1">Ultra League</option>
+        <option value="2">Master League</option>
+      </select>
+      <select class="standard-select padding-y" id="selectPokemon2">
+        <option value="" selected disabled>Select a pokemon:</option>
+      </select>
+    </div>
+    <div class="row main-row">
+      <div class="pokemon-container" id="pokemon1">
+        <p class="pokemon-title" id="pokemon1Name">
+        </p>
+        <p class="cp-title" id="pokemon1CP">
+        </p>
+        <div class="row stat-row">
+          <div class="column stat-column border">
+            <p>ATK:</p>
+            <p id="pokemon1Atk"></p>
+          </div>
+          <div class="column stat-column border">
+            <p>DEF:</p>
+            <p id="pokemon1Def"></p>
+          </div>
+          <div class="column stat-column border">
+            <p>HP:</p>
+            <p id="pokemon1Hp"></p>
+          </div>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            Level:
+          </span>
+          <select class="standard-select sub-select" id="pokemon1Level"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            ATK IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon1AtkIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            DEF IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon1DefIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            HP IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon1HpIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon1FastMove">
+            <option value="" selected disabled>Fast move:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon1ChargedMove1">
+            <option value="" selected disabled>Charged move 1:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon1ChargedMove2">
+            <option value="" selected disabled>Charged move 2:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon1Shields">
+            <option value="" selected disabled>Shields:</option>
+            <option value="1" >0</option>
+            <option value="1" >1</option>
+            <option value="2" >2</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pokemon-container" id="pokemon2">
+        <p class="pokemon-title" id="pokemon2Name">
+        </p>
+        <p class="cp-title" id="pokemon2CP">
+        </p>
+        <div class="row stat-row">
+          <div class="column stat-column border">
+            <p>ATK:</p>
+            <p id="pokemon2Atk"></p>
+          </div>
+          <div class="column stat-column border">
+            <p>DEF:</p>
+            <p id="pokemon2Def"></p>
+          </div>
+          <div class="column stat-column border">
+            <p>HP:</p>
+            <p id="pokemon2Hp"></p>
+          </div>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            Level:
+          </span>
+          <select class="standard-select sub-select" id="pokemon2Level"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            ATK IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon2AtkIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            DEF IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon2DefIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <span class="label">
+            HP IV:
+          </span>
+          <select class="standard-select sub-select" id="pokemon2HpIV"></select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon2FastMove">
+            <option value="" selected disabled>Fast move:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon2ChargedMove1">
+            <option value="" selected disabled>Charged move 1:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon2ChargedMove2">
+            <option value="" selected disabled>Charged move 2:</option>
+          </select>
+        </div>
+        <div class="row mb-small poke-row border">
+          <select class="standard-select move-select" id="pokemon2Shields">
+            <option value="" selected disabled>Shields:</option>
+            <option value="1" >0</option>
+            <option value="1" >1</option>
+            <option value="2" >2</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row main-row">
+      <button class="standard-button border" id="battleButton">Battle</button>
     </div>
   </div>
   <script src="./src/main.ts"></script>

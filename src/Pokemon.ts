@@ -1,5 +1,7 @@
-import { gameData, PokemonInfo, TypeOfMove } from './data';
-import { getCpMultiplier, searchAttack, truncateOneDecimal } from './Utilities';
+import { gameData, Move, PokemonInfo, TypeOfMove } from './data';
+import { MoveSelector } from './MoveSelector';
+import { Pokebattle } from './Pokebattle';
+import { getCpMultiplier, searchAttack, truncateOneDecimal, calculateMoveEffectiveness } from './Utilities';
 
 export enum Stat {
   atk,
@@ -8,6 +10,7 @@ export enum Stat {
 
 export class Pokemon {
   data: PokemonInfo;
+  moveSelector: MoveSelector;
 
   constructor(speciesId: string, level: number, atkIV: number, defIV: number, hpIV: number, fastMove: string, chargedMoves: string[], shields: number) {
     this.data = gameData.pokemon.filter((pokemon) => pokemon.speciesId === speciesId)[0];
@@ -71,6 +74,56 @@ export class Pokemon {
       return 4 / (4 - statToCheck);
     }
   }
+
+  isMoveCharged = (index: number): boolean => {
+    if(index > 0 && this.data.currentChargedMoves.length == 1){
+      return false;
+    }
+
+    return this.data.energy >= this.data.currentChargedMoves[index].energy;
+  }
+
+  calculateAttackDamage(attack: number, opposingPokemon: Pokemon): number {
+    let move;
+    if(attack == -1){
+      move = this.data.currentMove;
+    } else if(attack == 0){
+      move = this.data.currentFastMove;
+    } else if(attack == 1){
+      move = this.data.currentChargedMoves[0];
+    } else if(attack == 2 && this.data.currentChargedMoves.length > 1){
+      move = this.data.currentChargedMoves[1];
+    }
+    const hasStab = this.data.types.includes(move.type);
+    const stab = hasStab ? 1.2 : 1;
+    const bonusMultiplier = 1.3;
+    return Math.floor(0.5 * move.power * ( this.getStat(Stat.atk) / opposingPokemon.getStat(Stat.def)) * stab * calculateMoveEffectiveness(move.type, opposingPokemon.data.types) * bonusMultiplier) + 1;
+  };
+
+  getLowerEnergyMove(): number {
+    if(this.data.currentChargedMoves.length == 1){
+      return 1;
+    }
+    if(this.data.currentChargedMoves[0].energy <= this.data.currentChargedMoves[1].energy){
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+
+  setMoveSelector(defendingPokemon: Pokemon, pokeBattle: Pokebattle): void {
+    this.moveSelector = new MoveSelector(this, defendingPokemon, pokeBattle);
+  }
+
+  decideNextMove(): void{
+    this.data.currentMove = this.moveSelector.decideNextMove();
+    this.data.currentMove.elapsed = 0;
+  }
+
+  decideShield(): boolean {
+    return this.moveSelector.decideShield();
+  }
+
 }
 
 
