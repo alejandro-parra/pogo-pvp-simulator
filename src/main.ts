@@ -2,7 +2,7 @@ import { Pokebattle } from './Pokebattle';
 import { Pokemon } from './Pokemon';
 import { MoveSelector } from './MoveSelector';
 import { searchAttack } from './Utilities';
-import { gameData, Move, PokemonInfo, TypeOfMove } from './data';
+import { gameData, Move, pokedex, PokemonInfo, TypeOfMove } from './data';
 import { orderedPokemonList, searchPokemonInfo } from './Utilities';
 
 var pokemon1: Pokemon;
@@ -108,6 +108,7 @@ const pokemonChangeHandler = (e: Event): void => {
   if(pokemonSelected) {
     let newPokemon = searchPokemonInfo(pokemonSelected);
     populatePokemonContainer(newPokemon, select.id);
+    setPokemonImage(newPokemon,select.id);
   } else {
     populatePokemonContainer(null, select.id);
   }
@@ -292,6 +293,35 @@ const recalculatePokemon2 = (): void => {
     getElement('pokemon2CP').classList.remove('red');
   }
 }
+
+const setPokemonImage = (pokemon: PokemonInfo, id: string): void => {
+  let pokemonImg = pokedex.pokemon.filter((pokedex) => pokedex.name === pokemon.speciesName.split(" ",1)[0])[0].img;
+  if(id === 'selectPokemon1') {
+    (document.getElementById('pokemon1Img') as HTMLImageElement).src = pokemonImg;
+  } else {
+    (document.getElementById('pokemon2Img') as HTMLImageElement).src = pokemonImg;
+  }
+  
+  // let pokemonSelected = select.value;
+  // if(pokemonSelected) {
+  //   let newPokemon = searchPokemonInfo(pokemonSelected);
+  //   populatePokemonContainer(newPokemon, select.id);
+  // } else {
+  //   populatePokemonContainer(null, select.id);
+  // }
+
+  // <script language="JavaScript" type="text/javascript" src="src/data/pokedex.js" ></script>
+  // <script type="text/javascript">
+  // function displayImage1(elem, id) {
+    
+  //   var image = document.getElementById(id);
+  //   var name = elem.value.split("_",1);
+  //   console.log(name);
+  //   console.log(pokedex.pokemon.name[1]);
+  // }
+}
+
+
 
 const addEventListeners = (): void => {
   getElement('selectLeague').addEventListener('change', modifyLeague);
