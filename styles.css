@@ -116,3 +116,8 @@
 .red {
   color: red !important;
 }
+
+.poke-image {
+  align-self: center;
+  max-height: 8rem;
+}

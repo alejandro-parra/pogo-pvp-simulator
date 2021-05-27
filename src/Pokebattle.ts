@@ -178,38 +178,40 @@ export class Pokebattle {
   registerAttack(attackingPokemon: Pokemon, defendingPokemon: Pokemon): void {
     const move = attackingPokemon.data.currentMove;
 
-    if(move.typeOfMove == TypeOfMove.fast){
-      attackingPokemon.data.energy += move.energyGain;
-      defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
-      this.pokemonFainted(defendingPokemon);
-
-    } else{
-      console.log(attackingPokemon.data.speciesName + " used " + move.name);
-      attackingPokemon.data.energy -= move.energy;
-      
-      if(defendingPokemon.decideShield()){
-        defendingPokemon.data.currentHp -= 1;
-        defendingPokemon.data.shields -= 1;
-        this.pokemonFainted(defendingPokemon);
-      } else{
+    if(move){
+      if(move.typeOfMove == TypeOfMove.fast){
+        attackingPokemon.data.energy += move.energyGain;
         defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
         this.pokemonFainted(defendingPokemon);
-      }
-
-      if(move.buffs){
-        const rand = 1 - Math.random();
-        if(parseFloat(move.buffApplyChance) >= rand){
-          const bt = (move.buffTarget === BuffTarget.self ? attackingPokemon : defendingPokemon);
-          for(var i = 0; i < 2; i++){
-            bt.data.buffs[i] = Math.min(Math.max(bt.data.buffs[i] + move.buffs[i], -4), 4);
+  
+      } else{
+        console.log(attackingPokemon.data.speciesName + " used " + move.name);
+        attackingPokemon.data.energy -= move.energy;
+        
+        if(defendingPokemon.decideShield()){
+          defendingPokemon.data.currentHp -= 1;
+          defendingPokemon.data.shields -= 1;
+          this.pokemonFainted(defendingPokemon);
+        } else{
+          defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
+          this.pokemonFainted(defendingPokemon);
+        }
+  
+        if(move.buffs){
+          const rand = 1 - Math.random();
+          if(parseFloat(move.buffApplyChance) >= rand){
+            const bt = (move.buffTarget === BuffTarget.self ? attackingPokemon : defendingPokemon);
+            for(var i = 0; i < 2; i++){
+              bt.data.buffs[i] = Math.min(Math.max(bt.data.buffs[i] + move.buffs[i], -4), 4);
+            }
           }
         }
+  
+        if(defendingPokemon.data.currentMove && defendingPokemon.data.currentMove.typeOfMove === TypeOfMove.fast && defendingPokemon.data.currentMove.elapsed > 0){
+          this.registerAttack(defendingPokemon, attackingPokemon);
+        }
+  
       }
-
-      if(defendingPokemon.data.currentMove && defendingPokemon.data.currentMove.typeOfMove === TypeOfMove.fast && defendingPokemon.data.currentMove.elapsed > 0){
-        this.registerAttack(defendingPokemon, attackingPokemon);
-      }
-
     }
 
     attackingPokemon.data.currentMove = null;

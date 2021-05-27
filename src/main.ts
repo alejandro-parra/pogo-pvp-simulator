@@ -4,6 +4,7 @@ import { MoveSelector } from './MoveSelector';
 import { searchAttack } from './Utilities';
 import { gameData, Move, PokemonInfo, TypeOfMove } from './data';
 import { orderedPokemonList, searchPokemonInfo } from './Utilities';
+import pokeImages from './data/poke-images/*.png';
 
 var pokemon1: Pokemon;
 var pokemon2: Pokemon;
@@ -127,6 +128,7 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
   if(pokemonNumber === 'selectPokemon1') {
     getElement('pokemon1CP').classList.remove('red');
     pokemon1 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
+    (getElement('pokemon1Img') as HTMLImageElement).src = pokeImages[pokemon1.data.dex];   
     getElement('pokemon1Name').innerHTML = pokemon.speciesName;
     getElement('pokemon1CP').innerHTML = String(pokemon1.data.cp);
     getElement('pokemon1Atk').innerHTML = String(pokemon1.data.atk);
@@ -143,6 +145,7 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
   } else if(pokemonNumber === 'selectPokemon2') {
     getElement('pokemon2CP').classList.remove('red');
     pokemon2 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
+    (getElement('pokemon2Img') as HTMLImageElement).src = pokeImages[pokemon2.data.dex];
     getElement('pokemon2Name').innerHTML = pokemon.speciesName;
     getElement('pokemon2CP').innerHTML = String(pokemon2.data.cp);
     getElement('pokemon2Atk').innerHTML = String(pokemon2.data.atk);
