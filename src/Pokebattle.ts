@@ -2,9 +2,25 @@ import { BuffTarget, Move, typeEffectiveness, TypeOfMove } from './data';
 import { Pokemon, Stat } from './Pokemon';
 import { calculateMoveEffectiveness } from './Utilities';
 
+interface Turn {
+  pokemon1Attack?: string;
+  pokemon1AttackType?: string;
+  pokemon1AttackTypeOfMove?: TypeOfMove;
+  pokemon1AttackDamage?: number;
+  pokemon1Shielded?: boolean;
+  pokemon2Attack?: string;
+  pokemon2AttackType?: string;
+  pokemon2AttackTypeOfMove?: TypeOfMove;
+  pokemon2AttackDamage?: number;
+  pokemon2Shielded?: boolean;
+  pokemon1Hp: number;
+  pokemon2Hp: number;
+  pokemon1Energy: number;
+  pokemon2Energy: number;
+}
 
 export class Pokebattle {
-  results?: any;
+  results: Turn[];
   pokemon1: Pokemon;
   pokemon2: Pokemon;
   firstKO: Pokemon;
@@ -27,14 +43,34 @@ export class Pokebattle {
     this.pokemon2.setMoveSelector(this.pokemon1, this);
 
     this.firstKO = null;
+    this.results = [];
   }
 
 
   battle(): void {
     let timeElapsed = 0;
+    this.results.push({
+      pokemon1Energy: 0,
+      pokemon1Hp: this.pokemon1.data.hp,
+      pokemon2Energy: 0,
+      pokemon2Hp: this.pokemon2.data.hp
+    })
     while(timeElapsed < 240000) {
-
       if(this.pokemon1.data.currentMove && this.pokemon2.data.currentMove && this.pokemon1.data.currentMove.elapsed + 500 >= this.pokemon1.data.currentMove.cooldown && this.pokemon2.data.currentMove.elapsed + 500 >= this.pokemon2.data.currentMove.cooldown && this.pokemon1.moveSelector.moveKills(TypeOfMove.fast.valueOf()) && this.pokemon2.moveSelector.moveKills(TypeOfMove.fast.valueOf())){
+        this.results.push({
+          pokemon1Hp: 0,
+          pokemon2Hp: 0,
+          pokemon1Energy: this.pokemon1.data.energy,
+          pokemon2Energy: this.pokemon2.data.energy,
+          pokemon1Attack: this.pokemon1.data.currentMove.name,
+          pokemon2Attack: this.pokemon2.data.currentMove.name,
+          pokemon1AttackType: this.pokemon1.data.currentMove.type,
+          pokemon2AttackType: this.pokemon2.data.currentMove.type,
+          pokemon1AttackDamage: this.results[this.results.length-1].pokemon2Hp,
+          pokemon2AttackDamage: this.results[this.results.length-1].pokemon1Hp,
+          pokemon1AttackTypeOfMove: TypeOfMove.fast,
+          pokemon2AttackTypeOfMove: TypeOfMove.fast,
+        });
         this.registerAttack(this.pokemon1, this.pokemon2);
         this.registerAttack(this.pokemon2, this.pokemon1);
         this.firstKO = null;
@@ -44,17 +80,40 @@ export class Pokebattle {
 
       //console.log("PKMN1 move: " + this.pokemon1.data.currentMove);
       //console.log("PKMN2 move: " + this.pokemon2.data.currentMove);
-
+      let newTurn: Turn = {
+        pokemon1Hp: this.pokemon1.data.currentHp,
+        pokemon2Hp: this.pokemon2.data.currentHp,
+        pokemon1Energy: this.pokemon1.data.energy,
+        pokemon2Energy: this.pokemon2.data.energy,
+      }
       if(this.pokemon1.data.currentMove) {
         this.pokemon1.data.currentMove.elapsed += 500;
         if(this.pokemon1.data.currentMove.elapsed >= this.pokemon1.data.currentMove.cooldown) {
+          newTurn = {
+            ...newTurn,
+            pokemon1Attack: this.pokemon1.data.currentMove.name,
+            pokemon1AttackType: this.pokemon1.data.currentMove.type,
+            pokemon1AttackDamage: this.calculateMoveDamage(this.pokemon1, this.pokemon1.data.currentMove, this.pokemon2),
+            pokemon1AttackTypeOfMove: TypeOfMove.fast,
+          };
           this.registerAttack(this.pokemon1, this.pokemon2);
+          newTurn.pokemon1Energy = this.pokemon1.data.energy;
+          newTurn.pokemon2Hp = this.pokemon2.data.currentHp;
         }
       }
       if(this.pokemon2.data.currentMove) {
         this.pokemon2.data.currentMove.elapsed += 500;
         if(this.pokemon2.data.currentMove.elapsed >= this.pokemon2.data.currentMove.cooldown) {
+          newTurn = {
+            ...newTurn,
+            pokemon2Attack: this.pokemon2.data.currentMove.name,
+            pokemon2AttackType: this.pokemon2.data.currentMove.type,
+            pokemon2AttackDamage: this.calculateMoveDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1),
+            pokemon2AttackTypeOfMove: TypeOfMove.fast,
+          };
           this.registerAttack(this.pokemon2, this.pokemon1);
+          newTurn.pokemon2Energy = this.pokemon2.data.energy;
+          newTurn.pokemon1Hp = this.pokemon1.data.currentHp;
         }
       }
       
@@ -64,7 +123,7 @@ export class Pokebattle {
       if(!this.pokemon2.data.currentMove) {
         this.pokemon2.decideNextMove();
       }
-
+      this.results.push(newTurn);
       //console.log("=========================");
       //console.log("Nuevo turno: " + (timeElapsed / 500));
       //console.log("PKMN1 HP: " + this.pokemon1.data.currentHp);
@@ -72,8 +131,24 @@ export class Pokebattle {
       //console.log("PKMN1 move: " + this.pokemon1.data.currentMove.name);
       //console.log("PKMN2 move: " + this.pokemon2.data.currentMove.name);
       //console.log("=========================");
-  
+      let newChargedTurn: Turn = {
+        pokemon1Hp: this.pokemon1.data.currentHp,
+        pokemon2Hp: this.pokemon2.data.currentHp,
+        pokemon1Energy: this.pokemon1.data.energy,
+        pokemon2Energy: this.pokemon2.data.energy,
+      };
       if(this.pokemon1.data.currentMove && this.pokemon2.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged && this.pokemon2.data.currentMove.typeOfMove === TypeOfMove.charged) {
+        newChargedTurn = {
+          ...newChargedTurn,
+          pokemon1Attack: this.pokemon1.data.currentMove.name,
+          pokemon1AttackType: this.pokemon1.data.currentMove.type,
+          pokemon1AttackDamage: this.calculateMoveDamage(this.pokemon1, this.pokemon1.data.currentMove, this.pokemon2),
+          pokemon1AttackTypeOfMove: TypeOfMove.charged,
+          pokemon2Attack: this.pokemon2.data.currentMove.name,
+          pokemon2AttackType: this.pokemon2.data.currentMove.type,
+          pokemon2AttackDamage: this.calculateMoveDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1),
+          pokemon2AttackTypeOfMove: TypeOfMove.charged,
+        };
         if(this.pokemon1.data.atk > this.pokemon2.data.atk){
           this.registerAttack(this.pokemon1, this.pokemon2);
           this.registerAttack(this.pokemon2, this.pokemon1);
@@ -83,19 +158,45 @@ export class Pokebattle {
         } else{
           const rand = Math.random();
           if(rand > 0.5){
+            
             this.registerAttack(this.pokemon1, this.pokemon2);
             this.registerAttack(this.pokemon2, this.pokemon1);
           } else{
+            
             this.registerAttack(this.pokemon2, this.pokemon1);
             this.registerAttack(this.pokemon1, this.pokemon2);
           }
+          newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
+          newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
+          newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
+          newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
         }
       } else if(this.pokemon1.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged) {
+        newChargedTurn = {
+          ...newChargedTurn,
+          pokemon1Attack: this.pokemon1.data.currentMove.name,
+          pokemon1AttackType: this.pokemon1.data.currentMove.type,
+          pokemon1AttackDamage: this.calculateMoveDamage(this.pokemon1, this.pokemon1.data.currentMove, this.pokemon2),
+          pokemon1AttackTypeOfMove: TypeOfMove.charged,
+        };
         this.registerAttack(this.pokemon1, this.pokemon2);
+        newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
+        newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
       } else if(this.pokemon2.data.currentMove && this.pokemon2.data.currentMove.typeOfMove === TypeOfMove.charged) {
+        newChargedTurn = {
+          ...newChargedTurn,
+          pokemon2Attack: this.pokemon2.data.currentMove.name,
+          pokemon2AttackType: this.pokemon2.data.currentMove.type,
+          pokemon2AttackDamage: this.calculateMoveDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1),
+          pokemon2AttackTypeOfMove: TypeOfMove.charged,
+        };
         this.registerAttack(this.pokemon2, this.pokemon1);
+        newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
+        newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
       }
-
+      if(newChargedTurn.pokemon1Attack || newChargedTurn.pokemon2Attack) {
+        this.results.push(newChargedTurn);
+      }
       // añadimos el tiempo al contador global
       timeElapsed += 500;
 
@@ -104,7 +205,7 @@ export class Pokebattle {
         break;
       }
     }
-
+    console.log(this.results)
     console.log(this.firstKO);
     console.log(timeElapsed / 500);
     console.log("PKMN1 Buffs: " + this.pokemon1.data.buffs);
@@ -223,6 +324,7 @@ export class Pokebattle {
         }
   
         if(defendingPokemon.data.currentMove && defendingPokemon.data.currentMove.typeOfMove === TypeOfMove.fast && defendingPokemon.data.currentMove.elapsed > 0){
+          //PENDIENTE: registrar daño en results
           this.registerAttack(defendingPokemon, attackingPokemon);
         }
   
@@ -237,6 +339,10 @@ export class Pokebattle {
     if(pokemon.data.currentHp == 0 && !this.firstKO) {
       this.firstKO = pokemon;
     }
+  }
+
+  calculateMoveDamage(pokemon1: Pokemon, move: Move, pokemon2: Pokemon): number {
+    return Math.min(this.calculateAttackDamage(pokemon1, pokemon1.data.currentMove, pokemon2), pokemon2.data.currentHp)
   }
 
 }

@@ -23,7 +23,7 @@
     </div>
     <div class="row main-row">
       <div class="pokemon-container" id="pokemon1">
-        <img src="/src/data/poke-images/1.png" id="pokemon1Img" class="poke-image">
+        <img src="" id="pokemon1Img" class="poke-image">
         <p class="pokemon-title" id="pokemon1Name">
         </p>
         <p class="cp-title" id="pokemon1CP">
@@ -162,9 +162,19 @@
     </div>
 
     <div class="row main-row">
-      <button class="standard-button border" id="battleButton">Battle</button>
+      <a href="#resultsDiv"><button class="standard-button border" id="battleButton">Battle</button></a>
     </div>
+    <div class="chart-container" id="resultsDiv">
+      <p class="title">Resultados:</p>
+      <p class="subtitle" id="resultText" style="color: black !important;"></p>
+      <p class="subtitle">Vida restante:</p>
+      <canvas id="hpChart" class="chart"></canvas>
+      <p class="subtitle">Energía restante:</p>
+      <canvas id="energyChart" class="chart"></canvas>
+    </div>
+    
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js"></script>
   <script src="./src/main.ts"></script>
 </body>
 </html>

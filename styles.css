@@ -1,3 +1,7 @@
+body {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -5,6 +9,23 @@
   justify-content: flex-start;
   align-items: center;
   align-content: center;
+  z-index: 2;
+}
+
+.complete-screen {
+  width: 100%;
+  position: relative;
+  height: 100vh;
+}
+
+.bg-image {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: contain;
 }
 
 .row {
@@ -34,6 +55,8 @@
   justify-content: center;
   align-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: black;
 }
 
 .main-row {
@@ -49,6 +72,8 @@
   width: 80%;
   align-items: center;
   align-content: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: black;
 }
 
 .standard-select {
@@ -56,7 +81,7 @@
   border-radius: 10px;
   padding-left: 2rem;
   padding-right: 2rem;
-  background-color: none;
+  background: rgba(255, 255, 255, 0.6);
   color: black;
 }
 
@@ -120,4 +145,133 @@
 .poke-image {
   align-self: center;
   max-height: 8rem;
+}
+
+.bug {
+  background: linear-gradient(#f4fea5, #addf4a);
+  color: black;
+}
+
+.dark {
+  background: linear-gradient(#5a5366, #454449);
+  color: white;
+}
+
+.dragon {
+  background: linear-gradient(#53a4cf, #f16e57);
+  color: white;
+}
+
+.electric {
+  background: linear-gradient(#feeb7b, #c88302);
+  color: black;
+}
+
+.fairy {
+  background: linear-gradient(#f7ade1, #bd4295);
+  color: white;
+}
+
+.fighting {
+  background: linear-gradient(#f8a8a8, #d04040);
+  color: black;
+}
+
+.fire {
+  background: linear-gradient(#f75231, #732108);
+  color: white;
+}
+
+.flying {
+  background: linear-gradient(#d5ffff, #184ab4);
+  color: black;
+}
+
+.ghost {
+  background: linear-gradient(#6363b5, #4a3952);
+  color: white;
+}
+
+.grass {
+  background: linear-gradient(#7bce52, #426b39);
+  color: white;
+}
+
+.ground {
+  background: linear-gradient(#e0e000, #c8a048);
+  color: black;
+}
+
+.ice {
+  background: linear-gradient(#c0f8f8, #389888);
+  color: black;
+}
+
+.normal {
+  background: linear-gradient(#e8e8d8, #989078);
+  color: black;
+}
+
+.poison {
+  background: linear-gradient(#f85888, #a040a0);
+  color: white;
+}
+
+.psychic {
+  background: linear-gradient(#f8c0b0, #906060);
+  color: black;
+}
+
+.rock {
+  background: linear-gradient(#e0c068, #886830);
+  color: white;
+}
+
+.steel {
+  background: linear-gradient(#e8e8e8, #9090b0);
+  color: black;
+}
+
+.water {
+  background: linear-gradient(#c8d8f8, #3070c0);
+  color: white;
+}
+
+.chart {
+  width: 70% !important;
+  height: 50% !important;
+  align-self: center !important;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.chart-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.subtitle {
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+  margin-top: 5rem;
+  font-weight: 500;
+  font-size: 3rem;
+  color: black;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
 }

@@ -8,6 +8,8 @@ import pokeImages from './data/poke-images/*.png';
 
 var pokemon1: Pokemon;
 var pokemon2: Pokemon;
+var pokeBattle: Pokebattle;
+var turns = [];
 
 enum League {
   Great,
@@ -19,8 +21,94 @@ const init = (): void => {
   populatePokemonList();
   populateGeneralSelects();
   addEventListeners();
-
+  getElement('resultsDiv').style.display = 'none';
 }
+
+const initializeChart = () => {
+  getElement('resultsDiv').style.display = 'flex';
+  getElement('resultText').innerHTML = `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName : pokemon2.data.speciesName} ganó en ${pokeBattle.results.length-1} turnos!`;
+  for(let index = 0; index < pokeBattle.results.length; index ++) {
+    turns.push(String(index));
+  }
+  var hpChart = (document.getElementById('hpChart') as HTMLCanvasElement).getContext('2d');
+  var hpChartObject = new Chart(hpChart, {
+      type: 'line',
+      data: {
+          labels: turns,
+          datasets: [
+            {
+              label: pokemon1.data.speciesName,
+              data: pokeBattle.results.map((turn) => turn.pokemon1Hp),
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+          },
+          {
+            label: pokemon2.data.speciesName,
+            data: pokeBattle.results.map((turn) => turn.pokemon2Hp),
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+        }
+        ]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+
+  var energyChart = (document.getElementById('energyChart') as HTMLCanvasElement).getContext('2d');
+  var energyChartObject = new Chart(energyChart, {
+      type: 'line',
+      data: {
+          labels: turns,
+          datasets: [
+            {
+              label: pokemon1.data.speciesName,
+              data: pokeBattle.results.map((turn) => turn.pokemon1Energy),
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+          },
+          {
+            label: pokemon2.data.speciesName,
+            data: pokeBattle.results.map((turn) => turn.pokemon2Energy),
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+        }
+        ]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+
+};
 
 const battleButtonHandler = (): void => {
   console.log(pokemon1)
@@ -34,8 +122,9 @@ const battleButtonHandler = (): void => {
   } else if(getElement('pokemon1CP').classList.contains('red') || getElement('pokemon2CP').classList.contains('red')) {
     alert('One of your pokemon has invalid values, CP too high');
   } else if(pokemon1 && pokemon2) {
-    let pokeBattle = new Pokebattle(pokemon1, pokemon2);
+    pokeBattle = new Pokebattle(pokemon1, pokemon2);
     pokeBattle.battle();
+    initializeChart();
   } else {
     alert('Select 2 pokemon to fight');
   }
@@ -99,7 +188,7 @@ const populateMoveSelect = (selectId: string, moves: Move[]): void => {
     moveOption.value = move.moveId;
     select.appendChild(moveOption);
     if(index === 0) {
-      select.value = move.name;
+      select.value = move.moveId;
     }
   }) 
 }
@@ -128,7 +217,12 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
 
   if(pokemonNumber === 'selectPokemon1') {
     getElement('pokemon1CP').classList.remove('red');
+    if(pokemon1) {
+      getElement('pokemon1').classList.remove(pokemon1.data.types[0]);
+    }
     pokemon1 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
+    getElement('pokemon1').classList.add(pokemon1.data.types[0]);
+    console.log(pokemon1.data.types[0]);
     (getElement('pokemon1Img') as HTMLImageElement).src = pokeImages[pokemon1.data.dex];   
     getElement('pokemon1Name').innerHTML = pokemon.speciesName;
     getElement('pokemon1CP').innerHTML = String(pokemon1.data.cp);
@@ -142,10 +236,14 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
     populateMoveSelect('pokemon1FastMove', pokemon.fastMoves.map((moveId) => searchAttack(moveId)));
     populateMoveSelect('pokemon1ChargedMove1', pokemon.chargedMoves.map((moveId) => searchAttack(moveId)));
     populateMoveSelect('pokemon1ChargedMove2', pokemon.chargedMoves.map((moveId) => searchAttack(moveId)));
-    (getElement('pokemon1Shields') as HTMLSelectElement).value = '0';
+    (getElement('pokemon1Shields') as HTMLSelectElement).value = '2';
   } else if(pokemonNumber === 'selectPokemon2') {
     getElement('pokemon2CP').classList.remove('red');
+    if(pokemon2) {
+      getElement('pokemon2').classList.remove(pokemon2.data.types[0]);
+    }
     pokemon2 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
+    getElement('pokemon2').classList.add(pokemon2.data.types[0]);
     (getElement('pokemon2Img') as HTMLImageElement).src = pokeImages[pokemon2.data.dex];
     getElement('pokemon2Name').innerHTML = pokemon.speciesName;
     getElement('pokemon2CP').innerHTML = String(pokemon2.data.cp);
@@ -159,10 +257,13 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
     populateMoveSelect('pokemon2FastMove', pokemon.fastMoves.map((moveId) => searchAttack(moveId)));
     populateMoveSelect('pokemon2ChargedMove1', pokemon.chargedMoves.map((moveId) => searchAttack(moveId)));
     populateMoveSelect('pokemon2ChargedMove2', pokemon.chargedMoves.map((moveId) => searchAttack(moveId)));
-    (getElement('pokemon2Shields') as HTMLSelectElement).value = '0';
+    (getElement('pokemon2Shields') as HTMLSelectElement).value = '2';
   } else {
     if(pokemonNumber === 'selectPokemon1') {
       getElement('pokemon1CP').classList.remove('red');
+      if(pokemon1) {
+        getElement('pokemon1').classList.remove(pokemon1.data.types[0]);
+      }
       pokemon1 = null;
       getElement('pokemon1Name').innerHTML = '';
       getElement('pokemon1CP').innerHTML = '';
@@ -179,6 +280,9 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
       (getElement('pokemon1Shields') as HTMLSelectElement).value = '';
     } else {
       getElement('pokemon2CP').classList.remove('red');
+      if(pokemon2) {
+        getElement('pokemon2').classList.remove(pokemon2.data.types[0]);
+      }
       pokemon2 = null;
       getElement('pokemon2Name').innerHTML = '';
       getElement('pokemon2CP').innerHTML = '';
