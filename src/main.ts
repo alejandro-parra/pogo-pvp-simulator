@@ -28,7 +28,7 @@ const init = (): void => {
 
 const initializeChart = () => {
   getElement('resultsDiv').style.display = 'flex';
-  getElement('resultText').innerHTML = `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName : pokemon2.data.speciesName} ganó en ${pokeBattle.results.length-1} turnos!`;
+  getElement('resultText').innerHTML = (pokeBattle.firstKO) ? `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (izquierda)" : "") : pokemon2.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (derecha)" : "")} ganó en ${pokeBattle.results.length-1} turnos!` : `¡Empate! Double KO`;
   turns = [];
   for(let index = 0; index < pokeBattle.results.length; index ++) {
     turns.push(String(index));
@@ -163,10 +163,10 @@ const logAllBattle = () => {
       p1.appendChild(typeIcon1);
       let span1 = document.createElement('span');
       let b1 = document.createElement('b');
-      b1.innerHTML = `TURNO ${index}:`;
+      b1.innerHTML = `TURNO ${index}: `;
       span1.appendChild(b1);
       let battleText1 = document.createElement('span');
-      battleText1.innerHTML = `${pokemon1.data.speciesName} usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`;
+      battleText1.innerHTML = `${pokemon1.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(izquierda) ` : ``) + `usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`;
       if(turn.pokemon2Shielded) {
         battleText1.innerHTML += ` Ataque bloqueado.`;
       }
@@ -185,10 +185,10 @@ const logAllBattle = () => {
       p2.appendChild(typeIcon2);
       let span2 = document.createElement('span');
       let b2 = document.createElement('b');
-      b2.innerHTML = `TURNO ${index}:`;
+      b2.innerHTML = `TURNO ${index}: `;
       span2.appendChild(b2);
       let battleText2 = document.createElement('span');
-      battleText2.innerHTML = `${pokemon2.data.speciesName} usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`;
+      battleText2.innerHTML = `${pokemon2.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(derecha) ` : ``) + `usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`;
       if(turn.pokemon1Shielded) {
         battleText2.innerHTML += ` Ataque bloqueado.`;
       }
@@ -221,7 +221,7 @@ const populateGeneralSelects = (): void => {
 }
 
 const populateLevelSelect = (selectId: string): void => {
-  for(let level = 0; level < 51; level += 0.5) {
+  for(let level = 1; level <= 51; level += 0.5) {
     let option = document.createElement('option');
     option.innerHTML = String(level);
     option.value = String(level);
