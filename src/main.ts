@@ -122,21 +122,21 @@ const initializeChart = () => {
 const battleButtonHandler = (): void => {
   console.log(pokemon1)
   console.log(pokemon2)
-  pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
-  pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
-  recalculatePokemon1();
-  recalculatePokemon2();
-  console.log((getElement('pokemon1AttackStrategy') as HTMLSelectElement).value)
-  console.log((getElement('pokemon2AttackStrategy') as HTMLSelectElement).value)
-  pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
-  pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
-  pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
-  pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
   if(!(getElement('pokemon1Shields') as HTMLSelectElement).value || !(getElement('pokemon2Shields') as HTMLSelectElement).value) {
     alert('You must assign a shield number to your pokemon');
   } else if(getElement('pokemon1CP').classList.contains('red') || getElement('pokemon2CP').classList.contains('red')) {
     alert('One of your pokemon has invalid values, CP too high');
   } else if(pokemon1 && pokemon2) {
+    pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
+    pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
+    recalculatePokemon1();
+    recalculatePokemon2();
+    console.log((getElement('pokemon1AttackStrategy') as HTMLSelectElement).value)
+    console.log((getElement('pokemon2AttackStrategy') as HTMLSelectElement).value)
+    pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
+    pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
+    pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
+    pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
     console.log(pokemon1.data.attackStrategy);
     console.log(pokemon2.data.attackStrategy);
     pokeBattle = new Pokebattle(pokemon1, pokemon2);
