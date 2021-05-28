@@ -10,6 +10,8 @@ var pokemon1: Pokemon;
 var pokemon2: Pokemon;
 var pokeBattle: Pokebattle;
 var turns = [];
+var currentHpChart = null;
+var currentEnergyChart = null;
 
 enum League {
   Great,
@@ -27,11 +29,15 @@ const init = (): void => {
 const initializeChart = () => {
   getElement('resultsDiv').style.display = 'flex';
   getElement('resultText').innerHTML = `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName : pokemon2.data.speciesName} ganó en ${pokeBattle.results.length-1} turnos!`;
+  turns = [];
   for(let index = 0; index < pokeBattle.results.length; index ++) {
     turns.push(String(index));
   }
   var hpChart = (document.getElementById('hpChart') as HTMLCanvasElement).getContext('2d');
-  var hpChartObject = new Chart(hpChart, {
+  if(currentHpChart){
+    currentHpChart.destroy();
+  }
+  currentHpChart = new Chart(hpChart, {
       type: 'line',
       data: {
           labels: turns,
@@ -70,7 +76,10 @@ const initializeChart = () => {
   });
 
   var energyChart = (document.getElementById('energyChart') as HTMLCanvasElement).getContext('2d');
-  var energyChartObject = new Chart(energyChart, {
+  if(currentEnergyChart) {
+    currentEnergyChart.destroy();
+  }
+  currentEnergyChart = new Chart(energyChart, {
       type: 'line',
       data: {
           labels: turns,
