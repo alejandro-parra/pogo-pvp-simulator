@@ -16,7 +16,7 @@ export class MoveSelector {
         this.attackingPokemon = attackingPokemon;
         this.defendingPokemon = defendingPokemon;
         this.pokebattle = pokebattle;
-        this.setMatrixes("optimal", "always");
+        this.setMatrixes(this.attackingPokemon.data.attackStrategy, this.attackingPokemon.data.defenseStrategy);
         console.log(this.attackingPokemon.data.shields);
       }
 

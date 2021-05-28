@@ -124,6 +124,12 @@ const battleButtonHandler = (): void => {
   console.log(pokemon2)
   pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
   pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
+  console.log((getElement('pokemon1AttackStrategy') as HTMLSelectElement).value)
+  console.log((getElement('pokemon2AttackStrategy') as HTMLSelectElement).value)
+  pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
+  pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
+  pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
+  pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
   recalculatePokemon1();
   recalculatePokemon2();
   if(!(getElement('pokemon1Shields') as HTMLSelectElement).value || !(getElement('pokemon2Shields') as HTMLSelectElement).value) {
@@ -421,6 +427,14 @@ const handleSelectChange = (e: Event): void => {
     pokemon2.data.currentChargedMoves[0] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
   } else if(event.id === 'pokemon2ChargedMove2') {
     pokemon2.data.currentChargedMoves[1] = {...searchAttack(event.value), typeOfMove: TypeOfMove.charged};
+  } else if(event.id === 'pokemon1AttackStrategy') {
+    pokemon1.data.attackStrategy = event.value;
+  } else if(event.id === 'pokemon2AttackStrategy') {
+    pokemon2.data.attackStrategy = event.value;
+  } else if(event.id === 'pokemon1DefenseStrategy') {
+    pokemon2.data.defenseStrategy = event.value;
+  } else if(event.id === 'pokemon2DefenseStrategy') {
+    pokemon2.data.defenseStrategy = event.value;
   }
 };
 
