@@ -12,6 +12,8 @@ var pokeBattle: Pokebattle;
 var turns = [];
 var currentHpChart = null;
 var currentEnergyChart = null;
+var shadow1: HTMLImageElement = null;
+var shadow2: HTMLImageElement = null;
 
 enum League {
   Great,
@@ -28,7 +30,7 @@ const init = (): void => {
 
 const initializeChart = () => {
   getElement('resultsDiv').style.display = 'flex';
-  getElement('resultText').innerHTML = (pokeBattle.firstKO) ? `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (izquierda)" : "") : pokemon2.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (derecha)" : "")} ganó en ${pokeBattle.results.length-1} turnos!` : `¡Empate! Double KO`;
+  getElement('resultText').innerHTML = (pokeBattle.firstKO) ? `¡${pokeBattle.firstKO === pokemon2 ? pokemon1.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (left)" : "") : pokemon2.data.speciesName + (pokemon1.data.speciesId === pokemon2.data.speciesId ? " (right)" : "")} won in ${pokeBattle.results.length-1} turns!` : `TIE! Double KO`;
   turns = [];
   for(let index = 0; index < pokeBattle.results.length; index ++) {
     turns.push(String(index));
@@ -163,12 +165,12 @@ const logAllBattle = () => {
       p1.appendChild(typeIcon1);
       let span1 = document.createElement('span');
       let b1 = document.createElement('b');
-      b1.innerHTML = `TURNO ${index}: `;
+      b1.innerHTML = `TURN ${index}: `;
       span1.appendChild(b1);
       let battleText1 = document.createElement('span');
-      battleText1.innerHTML = `${pokemon1.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(izquierda) ` : ``) + `usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`;
+      battleText1.innerHTML = `${pokemon1.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(left) ` : ``) + `used ${turn.pokemon1Attack}, dealing ${turn.pokemon1AttackDamage} damage.`;
       if(turn.pokemon2Shielded) {
-        battleText1.innerHTML += ` Ataque bloqueado.`;
+        battleText1.innerHTML += ` Shielded attack.`;
       }
       span1.appendChild(battleText1)
       p1.appendChild(span1);
@@ -185,12 +187,12 @@ const logAllBattle = () => {
       p2.appendChild(typeIcon2);
       let span2 = document.createElement('span');
       let b2 = document.createElement('b');
-      b2.innerHTML = `TURNO ${index}: `;
+      b2.innerHTML = `TURN ${index}: `;
       span2.appendChild(b2);
       let battleText2 = document.createElement('span');
-      battleText2.innerHTML = `${pokemon2.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(derecha) ` : ``) + `usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`;
+      battleText2.innerHTML = `${pokemon2.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(right) ` : ``) + `used ${turn.pokemon2Attack}, dealing ${turn.pokemon2AttackDamage} damage.`;
       if(turn.pokemon1Shielded) {
-        battleText2.innerHTML += ` Ataque bloqueado.`;
+        battleText2.innerHTML += ` Shielded attack.`;
       }
       span2.appendChild(battleText2)
       p2.appendChild(span2);
@@ -292,6 +294,17 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
     }
     pokemon1 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
     getElement('pokemon1').classList.add(pokemon1.data.types[0]);
+    if(pokemon1.data.speciesId.endsWith('_shadow')) {
+      shadow1 = document.createElement('img') as HTMLImageElement;
+      shadow1.src = pokeImages['shadow'];
+      shadow1.classList.add('shadow');
+      getElement('pokemon1ImgContainer').appendChild(shadow1);
+    } else {
+      if(shadow1) {
+        getElement('pokemon1ImgContainer').removeChild(shadow1);
+        shadow1 = null;
+      }
+    }
     console.log(pokemon1.data.types[0]);
     let postInd = setPostIndex(pokemon1.data.speciesId);
     (getElement('pokemon1Img') as HTMLImageElement).src = pokeImages[pokemon1.data.dex + (postInd != 0 ? "-" + postInd : "")];   
@@ -314,6 +327,17 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
       getElement('pokemon2').classList.remove(pokemon2.data.types[0]);
     }
     pokemon2 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
+    if(pokemon2.data.speciesId.endsWith('_shadow')) {
+      shadow2 = document.createElement('img') as HTMLImageElement;
+      shadow2.src = pokeImages['shadow'];
+      shadow2.classList.add('shadow');
+      getElement('pokemon2ImgContainer').appendChild(shadow2);
+    } else {
+      if(shadow2) {
+        getElement('pokemon2ImgContainer').removeChild(shadow2);
+        shadow2 = null;
+      }
+    }
     getElement('pokemon2').classList.add(pokemon2.data.types[0]);
     let postInd = setPostIndex(pokemon2.data.speciesId);
     (getElement('pokemon2Img') as HTMLImageElement).src = pokeImages[pokemon2.data.dex + (postInd != 0 ? "-" + postInd : "")];
@@ -337,6 +361,10 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
         getElement('pokemon1').classList.remove(pokemon1.data.types[0]);
       }
       pokemon1 = null;
+      if(shadow1) {
+        getElement('pokemon1ImgContainer').removeChild(shadow1);
+        shadow1 = null;
+      }
       getElement('pokemon1Name').innerHTML = '';
       getElement('pokemon1CP').innerHTML = '';
       getElement('pokemon1Atk').innerHTML = '';
@@ -356,6 +384,10 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
         getElement('pokemon2').classList.remove(pokemon2.data.types[0]);
       }
       pokemon2 = null;
+      if(shadow2) {
+        getElement('pokemon2ImgContainer').removeChild(shadow2);
+        shadow2 = null;
+      }
       getElement('pokemon2Name').innerHTML = '';
       getElement('pokemon2CP').innerHTML = '';
       getElement('pokemon2Atk').innerHTML = '';

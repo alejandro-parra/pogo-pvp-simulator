@@ -25,7 +25,9 @@
     </div>
     <div class="row main-row">
       <div class="pokemon-container" id="pokemon1">
-        <img src="" id="pokemon1Img" class="poke-image">
+        <div class="img-container" id="pokemon1ImgContainer">
+          <img src="" id="pokemon1Img" class="poke-image">
+        </div>
         <p class="pokemon-title" id="pokemon1Name">
         </p>
         <p class="cp-title" id="pokemon1CP">
@@ -113,7 +115,9 @@
       </div>
 
       <div class="pokemon-container" id="pokemon2">
-        <img src="" id="pokemon2Img" class="poke-image">
+        <div class="img-container" id="pokemon2ImgContainer">
+          <img src="" id="pokemon2Img" class="poke-image">
+        </div>
         <p class="pokemon-title" id="pokemon2Name">
         </p>
         <p class="cp-title" id="pokemon2CP">
@@ -205,14 +209,14 @@
       <a href="#resultsDiv"><button class="standard-button border" id="battleButton">Battle</button></a>
     </div>
     <div class="chart-container" id="resultsDiv">
-      <p class="title">Resultados:</p>
+      <p class="title">Results:</p>
       <p class="subtitle" id="resultText" style="color: black !important;"></p>
-      <p class="subtitle">Vida restante:</p>
+      <p class="subtitle">Remaining HP Chart:</p>
       <canvas id="hpChart" class="chart"></canvas>
-      <p class="subtitle">Energía restante:</p>
+      <p class="subtitle">Remaining Energy Chart:</p>
       <canvas id="energyChart" class="chart"></canvas>
       <div class="log-div">
-        <p class="subtitle" style="margin-top: 0; color: black;">Resumen de la batalla:</p>
+        <p class="subtitle" style="margin-top: 0; color: black;">Battle log:</p>
         <div class="entries-div" id="entriesDiv">
           
         </div>
