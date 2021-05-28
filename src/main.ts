@@ -124,19 +124,21 @@ const battleButtonHandler = (): void => {
   console.log(pokemon2)
   pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
   pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
+  recalculatePokemon1();
+  recalculatePokemon2();
   console.log((getElement('pokemon1AttackStrategy') as HTMLSelectElement).value)
   console.log((getElement('pokemon2AttackStrategy') as HTMLSelectElement).value)
   pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
   pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
   pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
   pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
-  recalculatePokemon1();
-  recalculatePokemon2();
   if(!(getElement('pokemon1Shields') as HTMLSelectElement).value || !(getElement('pokemon2Shields') as HTMLSelectElement).value) {
     alert('You must assign a shield number to your pokemon');
   } else if(getElement('pokemon1CP').classList.contains('red') || getElement('pokemon2CP').classList.contains('red')) {
     alert('One of your pokemon has invalid values, CP too high');
   } else if(pokemon1 && pokemon2) {
+    console.log(pokemon1.data.attackStrategy);
+    console.log(pokemon2.data.attackStrategy);
     pokeBattle = new Pokebattle(pokemon1, pokemon2);
     pokeBattle.battle();
     initializeChart();
@@ -164,7 +166,10 @@ const logAllBattle = () => {
       b1.innerHTML = `TURNO ${index}:`;
       span1.appendChild(b1);
       let battleText1 = document.createElement('span');
-      battleText1.innerHTML = `${pokemon1.data.speciesName} usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`; 
+      battleText1.innerHTML = `${pokemon1.data.speciesName} usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`;
+      if(turn.pokemon2Shielded) {
+        battleText1.innerHTML += ` Ataque bloqueado.`;
+      }
       span1.appendChild(battleText1)
       p1.appendChild(span1);
       entriesDiv.appendChild(p1);
@@ -183,7 +188,10 @@ const logAllBattle = () => {
       b2.innerHTML = `TURNO ${index}:`;
       span2.appendChild(b2);
       let battleText2 = document.createElement('span');
-      battleText2.innerHTML = `${pokemon2.data.speciesName} usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`; 
+      battleText2.innerHTML = `${pokemon2.data.speciesName} usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`;
+      if(turn.pokemon1Shielded) {
+        battleText2.innerHTML += ` Ataque bloqueado.`;
+      }
       span2.appendChild(battleText2)
       p2.appendChild(span2);
       entriesDiv.appendChild(p2);
@@ -233,6 +241,7 @@ const populateIVSelect = (selectId: string): void => {
 const populateMoveSelect = (selectId: string, moves: Move[]): void => {
   let defaultOption = document.createElement('option');
   defaultOption.value = '';
+  defaultOption.disabled = true;
   if(selectId === 'pokemon1FastMove' || selectId === 'pokemon2FastMove') {
     defaultOption.innerHTML = 'Fast move:';
   } else if(selectId === 'pokemon1ChargedMove1' || selectId === 'pokemon2ChargedMove1') {
@@ -284,7 +293,8 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
     pokemon1 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
     getElement('pokemon1').classList.add(pokemon1.data.types[0]);
     console.log(pokemon1.data.types[0]);
-    (getElement('pokemon1Img') as HTMLImageElement).src = pokeImages[pokemon1.data.dex];   
+    let postInd = setPostIndex(pokemon1.data.speciesId);
+    (getElement('pokemon1Img') as HTMLImageElement).src = pokeImages[pokemon1.data.dex + (postInd != 0 ? "-" + postInd : "")];   
     getElement('pokemon1Name').innerHTML = pokemon.speciesName;
     getElement('pokemon1CP').innerHTML = String(pokemon1.data.cp);
     getElement('pokemon1Atk').innerHTML = String(pokemon1.data.atk);
@@ -305,7 +315,8 @@ const populatePokemonContainer = (pokemon: PokemonInfo, pokemonNumber: string) =
     }
     pokemon2 = new Pokemon(pokemon.speciesId, defaultIVs[0], defaultIVs[1], defaultIVs[2], defaultIVs[3], pokemon.fastMoves[0], [pokemon.chargedMoves[0]], 0);
     getElement('pokemon2').classList.add(pokemon2.data.types[0]);
-    (getElement('pokemon2Img') as HTMLImageElement).src = pokeImages[pokemon2.data.dex];
+    let postInd = setPostIndex(pokemon2.data.speciesId);
+    (getElement('pokemon2Img') as HTMLImageElement).src = pokeImages[pokemon2.data.dex + (postInd != 0 ? "-" + postInd : "")];
     getElement('pokemon2Name').innerHTML = pokemon.speciesName;
     getElement('pokemon2CP').innerHTML = String(pokemon2.data.cp);
     getElement('pokemon2Atk').innerHTML = String(pokemon2.data.atk);
@@ -367,7 +378,7 @@ const populatePokemonSelect = (selectId: string): void => {
   for(let pokemon of orderedPokemonList()) {
     let pokemonOption = document.createElement('option');
     pokemonOption.value = pokemon.speciesId;
-    pokemonOption.innerHTML = pokemon.speciesId;
+    pokemonOption.innerHTML = pokemon.speciesName;
     select.appendChild(pokemonOption);
   }
 };
@@ -475,5 +486,95 @@ const addEventListeners = (): void => {
   getElement('battleButton').addEventListener('click', battleButtonHandler);
   document.addEventListener('change', handleSelectChange);
 };
+
+const setPostIndex = (id: string): number => {
+    let ret = 0;
+    ret = id.endsWith("_alolan") || id.includes("_mega") ? 1 : 0;
+    ret += id.includes("_galarian") ? id.includes("meowth") ? 2 : 1 : 0;
+    ret += id.endsWith("_y") ? 1 : 0;
+
+    if(id.startsWith("castform")) {
+      if(id.endsWith("_sunny")) return 1;
+      if(id.endsWith("_rainy")) return 2;
+      if(id.endsWith("_snowy")) return 3;
+    }
+
+    if(id.startsWith("deoxys")) {
+      if(id.endsWith("_attack")) return 1;
+      if(id.endsWith("_defense")) return 2;
+      if(id.endsWith("_speed")) return 3;
+    }
+
+    if(id.startsWith("burmy") || id.startsWith("wormadam")){
+      if(id.endsWith("_sandy")) return 1;
+      if(id.endsWith("_trash")) return 2;
+    }
+
+    if(id.startsWith("cherrim") && id.endsWith("_sunny")) return 1;
+
+    if(id.endsWith("_east_sea")) return 1;
+
+    if(id.startsWith("rotom")){
+      if(id.endsWith("_heat")) return 1;
+      if(id.endsWith("_wash")) return 2;
+      if(id.endsWith("_frost")) return 3;
+      if(id.endsWith("_fan")) return 4;
+      if(id.endsWith("_mow")) return 5;
+    }
+
+    if(id.startsWith("giratina") && id.endsWith("_altered")) return 1;
+
+    if(id.startsWith("shaymin") && id.endsWith("_sky")) return 1;
+
+    if(id.startsWith("arceus")){
+      if(id.endsWith("_fighting")) return 1;
+      if(id.endsWith("_flying")) return 2;
+      if(id.endsWith("_poison")) return 3;
+      if(id.endsWith("_ground")) return 4;
+      if(id.endsWith("_rock")) return 5;
+      if(id.endsWith("_bug")) return 6;
+      if(id.endsWith("_ghost")) return 7;
+      if(id.endsWith("_steel")) return 8;
+      if(id.endsWith("_fire")) return 9;
+      if(id.endsWith("_water")) return 10;
+      if(id.endsWith("_grass")) return 11;
+      if(id.endsWith("_electric")) return 12;
+      if(id.endsWith("_psychic")) return 13;
+      if(id.endsWith("_ice")) return 14;
+      if(id.endsWith("_dragon")) return 15;
+      if(id.endsWith("_dark")) return 16;
+      if(id.endsWith("_fairy")) return 17;
+    }
+
+    if(id.startsWith("darmanitan")){
+      ret = 0;
+      if(id.includes("_galarian")) ret = 2;
+      if(id.includes("_zen")) ret += 1;
+    }
+
+    if(id.startsWith("tornadus") || id.startsWith("thundurus") || id.startsWith("landorus")){
+      if(id.endsWith("_therian")) return 1;
+    }
+
+    if(id.startsWith("kyurem")){
+      if(id.endsWith("_white")) return 1;
+      if(id.endsWith("_black")) return 2;
+    }
+
+    if(id.startsWith("keldeo") && id.endsWith("_resolute")) return 1;
+
+    if(id.startsWith("meloetta") && id.endsWith("_pirouette")) return 1;
+
+    if(id.startsWith("genesect")){
+      if(id.endsWith("_douse")) return 1;
+      if(id.endsWith("_shock")) return 2;
+      if(id.endsWith("_burn")) return 3;
+      if(id.endsWith("_chill")) return 4;
+    }
+
+    if(id.startsWith("meowstic") && id.endsWith("_female")) return 1;
+
+    return ret;
+}
 
 window.addEventListener('DOMContentLoaded', init);
