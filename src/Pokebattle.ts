@@ -137,6 +137,8 @@ export class Pokebattle {
         pokemon1Energy: this.pokemon1.data.energy,
         pokemon2Energy: this.pokemon2.data.energy,
       };
+
+      
       if(this.pokemon1.data.currentMove && this.pokemon2.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged && this.pokemon2.data.currentMove.typeOfMove === TypeOfMove.charged) {
         newChargedTurn = {
           ...newChargedTurn,
@@ -166,11 +168,12 @@ export class Pokebattle {
             this.registerAttack(this.pokemon2, this.pokemon1);
             this.registerAttack(this.pokemon1, this.pokemon2);
           }
-          newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
-          newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
-          newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
-          newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
+
         }
+        newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
+        newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
+        newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
+        newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
       } else if(this.pokemon1.data.currentMove && this.pokemon1.data.currentMove.typeOfMove === TypeOfMove.charged) {
         newChargedTurn = {
           ...newChargedTurn,
@@ -202,6 +205,7 @@ export class Pokebattle {
 
         
       if(this.firstKO){
+        console.log(newChargedTurn);
         break;
       }
     }
