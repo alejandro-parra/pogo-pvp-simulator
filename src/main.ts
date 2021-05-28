@@ -134,10 +134,56 @@ const battleButtonHandler = (): void => {
     pokeBattle = new Pokebattle(pokemon1, pokemon2);
     pokeBattle.battle();
     initializeChart();
+    logAllBattle();
   } else {
     alert('Select 2 pokemon to fight');
   }
 }
+
+const logAllBattle = () => {
+  //<p style="width: 100%;"><div class="type-icon psychic"></div> <span><b>TURNO 1:</b> Altaria usó Dragonbreath, 65 daño</span></p>
+  let entriesDiv = getElement('entriesDiv');
+  entriesDiv.innerHTML = '';
+  pokeBattle.results.forEach((turn, index) => {
+    if(turn.pokemon1Attack) {
+      let p1 = document.createElement('p');
+      p1.style.width = '100%';
+      p1.style.textAlign = 'left';
+      let typeIcon1 = document.createElement('div');
+      typeIcon1.classList.add('type-icon');
+      typeIcon1.classList.add(turn.pokemon1AttackType.toLowerCase());
+      p1.appendChild(typeIcon1);
+      let span1 = document.createElement('span');
+      let b1 = document.createElement('b');
+      b1.innerHTML = `TURNO ${index}:`;
+      span1.appendChild(b1);
+      let battleText1 = document.createElement('span');
+      battleText1.innerHTML = `${pokemon1.data.speciesName} usó ${turn.pokemon1Attack}, ${turn.pokemon1AttackDamage} de daño.`; 
+      span1.appendChild(battleText1)
+      p1.appendChild(span1);
+      entriesDiv.appendChild(p1);
+    }
+
+    if(turn.pokemon2Attack) {
+      let p2 = document.createElement('p');
+      p2.style.width = '100%';
+      p2.style.textAlign = 'left';
+      let typeIcon2 = document.createElement('div');
+      typeIcon2.classList.add('type-icon');
+      typeIcon2.classList.add(turn.pokemon2AttackType.toLowerCase());
+      p2.appendChild(typeIcon2);
+      let span2 = document.createElement('span');
+      let b2 = document.createElement('b');
+      b2.innerHTML = `TURNO ${index}:`;
+      span2.appendChild(b2);
+      let battleText2 = document.createElement('span');
+      battleText2.innerHTML = `${pokemon2.data.speciesName} usó ${turn.pokemon2Attack}, ${turn.pokemon2AttackDamage} de daño.`; 
+      span2.appendChild(battleText2)
+      p2.appendChild(span2);
+      entriesDiv.appendChild(p2);
+    }
+  });
+};
 
 const populatePokemonList = (): void => {
   populatePokemonSelect('selectPokemon1');

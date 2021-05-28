@@ -152,9 +152,17 @@ export class Pokebattle {
         if(this.pokemon1.data.atk > this.pokemon2.data.atk){
           this.registerAttack(this.pokemon1, this.pokemon2);
           this.registerAttack(this.pokemon2, this.pokemon1);
+          newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
+          newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
+          newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
+          newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
         } else if (this.pokemon1.data.atk < this.pokemon2.data.atk){
           this.registerAttack(this.pokemon2, this.pokemon1);
           this.registerAttack(this.pokemon1, this.pokemon2);
+          newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
+          newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
+          newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
+          newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
         } else{
           const rand = Math.random();
           if(rand > 0.5){
