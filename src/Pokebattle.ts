@@ -15,6 +15,14 @@ export class Pokebattle {
     this.pokemon2 = pokemon2;
     this.pokemon2.data = JSON.parse(JSON.stringify(pokemon2.data));
 
+    if(pokemon1.data.currentChargedMoves.length > 1){
+      console.log(pokemon1.data.currentChargedMoves.sort((a, b) => (this.damageEfficiency(pokemon1, a, pokemon2) > this.damageEfficiency(pokemon1, b, pokemon2) ? 1 : -1)));
+    }
+
+    if(pokemon2.data.currentChargedMoves.length > 1){
+      console.log(pokemon2.data.currentChargedMoves.sort((a, b) => (this.damageEfficiency(pokemon2, a, pokemon1) > this.damageEfficiency(pokemon2, b, pokemon1) ? 1 : -1)));
+    }
+
     this.pokemon1.setMoveSelector(this.pokemon2, this);
     this.pokemon2.setMoveSelector(this.pokemon1, this);
 
@@ -194,10 +202,12 @@ export class Pokebattle {
         attackingPokemon.data.energy -= move.energy;
         
         if(defendingPokemon.decideShield()){
+          console.log("shielded");
           defendingPokemon.data.currentHp -= 1;
           defendingPokemon.data.shields -= 1;
           this.pokemonFainted(defendingPokemon);
         } else{
+          console.log("not shielded");
           defendingPokemon.data.currentHp -= Math.min(this.calculateAttackDamage(attackingPokemon, move, defendingPokemon), defendingPokemon.data.currentHp);
           this.pokemonFainted(defendingPokemon);
         }

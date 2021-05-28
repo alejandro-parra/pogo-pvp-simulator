@@ -19,6 +19,7 @@ const init = (): void => {
   populatePokemonList();
   populateGeneralSelects();
   addEventListeners();
+
 }
 
 const battleButtonHandler = (): void => {

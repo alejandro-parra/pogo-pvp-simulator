@@ -117,7 +117,9 @@ export class Pokemon {
 
   decideNextMove(): void{
     this.data.currentMove = this.moveSelector.decideNextMove();
-    this.data.currentMove.elapsed = 0;
+    if(this.data.currentMove){
+      this.data.currentMove.elapsed = 0;
+    }
   }
 
   decideShield(): boolean {
