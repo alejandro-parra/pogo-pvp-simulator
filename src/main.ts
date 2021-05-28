@@ -172,6 +172,9 @@ const logAllBattle = () => {
       if(turn.pokemon2Shielded) {
         battleText1.innerHTML += ` Shielded attack.`;
       }
+      if(turn.pokemon1Buffs) {
+        battleText1.innerHTML += `${turn.pokemon1Buffs[0]} Attack. ${turn.pokemon1Buffs[1]} Defense.`;
+      }
       span1.appendChild(battleText1)
       p1.appendChild(span1);
       entriesDiv.appendChild(p1);
@@ -193,6 +196,9 @@ const logAllBattle = () => {
       battleText2.innerHTML = `${pokemon2.data.speciesName} ` + (pokemon1.data.speciesId === pokemon2.data.speciesId ? `(right) ` : ``) + `used ${turn.pokemon2Attack}, dealing ${turn.pokemon2AttackDamage} damage.`;
       if(turn.pokemon1Shielded) {
         battleText2.innerHTML += ` Shielded attack.`;
+      }
+      if(turn.pokemon2Buffs) {
+        battleText2.innerHTML += `${turn.pokemon2Buffs[0]} Attack. ${turn.pokemon2Buffs[1]} Defense.`;
       }
       span2.appendChild(battleText2)
       p2.appendChild(span2);

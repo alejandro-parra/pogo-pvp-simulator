@@ -19,6 +19,8 @@ interface Turn {
   pokemon2Hp: number;
   pokemon1Energy: number;
   pokemon2Energy: number;
+  pokemon1Buffs?: number[];
+  pokemon2Buffs?: number[];
 }
 
 export class Pokebattle {
@@ -166,22 +168,104 @@ export class Pokebattle {
           pokemon2AttackDamage: this.calculateMoveDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1),
           pokemon2AttackTypeOfMove: TypeOfMove.charged,
         };
+        let pokemon1BuffTmp = this.pokemon1.data.buffs;
+        let pokemon2BuffTmp = this.pokemon2.data.buffs;
         if(this.pokemon1.data.atk > this.pokemon2.data.atk){
           this.registerAttack(this.pokemon1, this.pokemon2);
+          if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+            newChargedTurn.pokemon1Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                            this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+          }
+          if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+            newChargedTurn.pokemon1Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                            this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+          }
+          pokemon1BuffTmp = this.pokemon1.data.buffs;
+          pokemon2BuffTmp = this.pokemon2.data.buffs;
           this.registerAttack(this.pokemon2, this.pokemon1);
+          if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+            newChargedTurn.pokemon2Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                            this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+          }
+          if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+            newChargedTurn.pokemon2Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                            this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+          }
+          pokemon1BuffTmp = this.pokemon1.data.buffs;
+          pokemon2BuffTmp = this.pokemon2.data.buffs;
         } else if (this.pokemon1.data.atk < this.pokemon2.data.atk){
           this.registerAttack(this.pokemon2, this.pokemon1);
+          if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+            newChargedTurn.pokemon2Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                            this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+          }
+          if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+            newChargedTurn.pokemon2Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                            this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+          }
+          pokemon1BuffTmp = this.pokemon1.data.buffs;
+          pokemon2BuffTmp = this.pokemon2.data.buffs;
           this.registerAttack(this.pokemon1, this.pokemon2);
+          if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+            newChargedTurn.pokemon1Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                            this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+          }
+          if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+            newChargedTurn.pokemon1Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                            this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+          }
+          pokemon1BuffTmp = this.pokemon1.data.buffs;
+          pokemon2BuffTmp = this.pokemon2.data.buffs;
         } else{
           const rand = Math.random();
           if(rand > 0.5){
             
             this.registerAttack(this.pokemon1, this.pokemon2);
+            if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+              newChargedTurn.pokemon1Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                              this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+            }
+            if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+              newChargedTurn.pokemon1Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                              this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+            }
+            pokemon1BuffTmp = this.pokemon1.data.buffs;
+            pokemon2BuffTmp = this.pokemon2.data.buffs;
             this.registerAttack(this.pokemon2, this.pokemon1);
+            if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+              newChargedTurn.pokemon2Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                              this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+            }
+            if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+              newChargedTurn.pokemon2Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                              this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+            }
+            pokemon1BuffTmp = this.pokemon1.data.buffs;
+            pokemon2BuffTmp = this.pokemon2.data.buffs;
           } else{
             
             this.registerAttack(this.pokemon2, this.pokemon1);
+            if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+              newChargedTurn.pokemon2Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                              this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+            }
+            if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+              newChargedTurn.pokemon2Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                              this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+            }
+            pokemon1BuffTmp = this.pokemon1.data.buffs;
+            pokemon2BuffTmp = this.pokemon2.data.buffs;
             this.registerAttack(this.pokemon1, this.pokemon2);
+            if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+              newChargedTurn.pokemon1Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                              this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+            }
+            if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+              newChargedTurn.pokemon1Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                              this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+            }
+            pokemon1BuffTmp = this.pokemon1.data.buffs;
+            pokemon2BuffTmp = this.pokemon2.data.buffs;
           }
 
         }
@@ -199,7 +283,19 @@ export class Pokebattle {
           pokemon1AttackDamage: this.calculateMoveDamage(this.pokemon1, this.pokemon1.data.currentMove, this.pokemon2),
           pokemon1AttackTypeOfMove: TypeOfMove.charged,
         };
+        let pokemon1BuffTmp = this.pokemon1.data.buffs;
+        let pokemon2BuffTmp = this.pokemon2.data.buffs;
         this.registerAttack(this.pokemon1, this.pokemon2);
+        if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+          newChargedTurn.pokemon1Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                          this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+        }
+        if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+          newChargedTurn.pokemon1Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                          this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+        }
+        pokemon1BuffTmp = this.pokemon1.data.buffs;
+        pokemon2BuffTmp = this.pokemon2.data.buffs;
         newChargedTurn.pokemon1Energy = this.pokemon1.data.energy;
         newChargedTurn.pokemon2Hp = this.pokemon2.data.currentHp;
         newChargedTurn.pokemon1AttackDamage = this.results[this.results.length-1].pokemon2Hp - this.pokemon2.data.currentHp;
@@ -211,7 +307,19 @@ export class Pokebattle {
           pokemon2AttackDamage: this.calculateMoveDamage(this.pokemon2, this.pokemon2.data.currentMove, this.pokemon1),
           pokemon2AttackTypeOfMove: TypeOfMove.charged,
         };
+        let pokemon1BuffTmp = this.pokemon1.data.buffs;
+        let pokemon2BuffTmp = this.pokemon2.data.buffs;
         this.registerAttack(this.pokemon2, this.pokemon1);
+        if (pokemon1BuffTmp !== this.pokemon1.data.buffs ) {
+          newChargedTurn.pokemon2Buffs = [this.pokemon1.data.buffs[0]-pokemon1BuffTmp[0],
+                                          this.pokemon1.data.buffs[1]-pokemon1BuffTmp[1]];
+        }
+        if ( pokemon2BuffTmp !== this.pokemon2.data.buffs ) {
+          newChargedTurn.pokemon2Buffs = [this.pokemon2.data.buffs[0]-pokemon2BuffTmp[0],
+                                          this.pokemon2.data.buffs[1]-pokemon2BuffTmp[1]];
+        }
+        pokemon1BuffTmp = this.pokemon1.data.buffs;
+        pokemon2BuffTmp = this.pokemon2.data.buffs;
         newChargedTurn.pokemon2Energy = this.pokemon2.data.energy;
         newChargedTurn.pokemon1Hp = this.pokemon1.data.currentHp;
         newChargedTurn.pokemon2AttackDamage = this.results[this.results.length-1].pokemon1Hp - this.pokemon1.data.currentHp;
