@@ -132,13 +132,15 @@ const battleButtonHandler = (): void => {
     pokemon1.data.shields = Number((getElement('pokemon1Shields') as HTMLSelectElement).value);
     pokemon2.data.shields = Number((getElement('pokemon2Shields') as HTMLSelectElement).value);
     recalculatePokemon1();
+    pokemon1.data = JSON.parse(JSON.stringify(pokemon1.data));
+    pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
+    pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
     recalculatePokemon2();
+    pokemon2.data = JSON.parse(JSON.stringify(pokemon2.data));
+    pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
+    pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
     console.log((getElement('pokemon1AttackStrategy') as HTMLSelectElement).value)
     console.log((getElement('pokemon2AttackStrategy') as HTMLSelectElement).value)
-    pokemon1.data.attackStrategy = (getElement('pokemon1AttackStrategy') as HTMLSelectElement).value;
-    pokemon2.data.attackStrategy = (getElement('pokemon2AttackStrategy') as HTMLSelectElement).value;
-    pokemon1.data.defenseStrategy = (getElement('pokemon1DefenseStrategy') as HTMLSelectElement).value;
-    pokemon2.data.defenseStrategy = (getElement('pokemon2DefenseStrategy') as HTMLSelectElement).value;
     console.log(pokemon1.data.attackStrategy);
     console.log(pokemon2.data.attackStrategy);
     pokeBattle = new Pokebattle(pokemon1, pokemon2);
@@ -173,6 +175,7 @@ const logAllBattle = () => {
         battleText1.innerHTML += ` Shielded attack.`;
       }
       if(turn.pokemon1Buffs) {
+        console.log("XDDDDDDDDDDD");
         battleText1.innerHTML += `${turn.pokemon1Buffs[0]} Attack. ${turn.pokemon1Buffs[1]} Defense.`;
       }
       span1.appendChild(battleText1)
