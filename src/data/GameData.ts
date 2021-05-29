@@ -45,6 +45,8 @@ export interface PokemonInfo {
   hp?: number;
   cp?: number;
   currentHp?: number;
+  attackStrategy?: string;
+  defenseStrategy?: string;
 }
 
 export enum TypeOfMove {
